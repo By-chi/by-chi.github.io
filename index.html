@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,6 +14,8 @@
         html {
             height: 100%;
             font-size: 10px;
+            /* 【新增】禁用html滚动（PC端核心） */
+            overflow: hidden;
         }
 
         body {
@@ -23,9 +25,13 @@
             justify-content: center;
             font-family: Arial;
             background-color: black;
-            overflow: hidden;
+            overflow: hidden; /* 原有：保留，配合html禁用PC滚动 */
+            /* 【新增】防止body高度溢出，固定视口 */
+            position: fixed;
+            width: 100%;
         }
 
+        /* 响应式字体大小 */
         @media screen and (max-width: 767px) {
             html {
                 font-size: 6px;
@@ -50,6 +56,7 @@
             }
         }
 
+        /* 核心动画容器 - 仅动画区域样式 */
         .container {
             position: relative;
             display: flex;
@@ -58,10 +65,30 @@
             color: white;
             transform: scale(2.5);
             transform-origin: 80% 50%;
+            cursor: pointer; /* 点击提示：手型指针 */
             /* 仅保留移动动画 + 纯透明消失动画（无任何位移/缩放） */
             animation: 
                 move 0.8s 1.5s cubic-bezier(0.1, 0.6, 0, 1) forwards,
                 fade_out 1.5s 3s forwards;
+            /* 仅动画区域禁用文本选择 */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+            -webkit-touch-callout: none;
+        }
+
+        /* 动画容器子元素兜底禁用文本选择 */
+        .container * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+            -webkit-touch-callout: none;
         }
 
         .delay{
@@ -136,6 +163,7 @@
             animation: line 0.5s 1.7s forwards;
         }
 
+        /* 遮罩层 - 仅动画区域样式 */
         .shadow__spot {
             position: fixed;
             top: 0;
@@ -147,8 +175,17 @@
             animation: 
                 fade_spot 1s 1.5s forwards,
                 fade_out 1.5s 3s forwards;
+            /* 仅动画区域禁用文本选择 */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+            -webkit-touch-callout: none;
         }
 
+        /* 动画关键帧 */
         @keyframes move {
             to {
                 transform: none;
@@ -196,7 +233,8 @@
 </head>
 
 <body>
-    <div class="container">
+    <!-- 动画容器：仅此区域禁用翻译 -->
+    <div class="container" translate="no">
         <span class="delay">By.</span>
         <div class="letter">
             <ul class="ul">
@@ -215,9 +253,19 @@
         <span class="delay">hi</span>
     </div>
 
-    <div class="shadow__spot"></div>
+    <!-- 遮罩层：仅此区域禁用翻译 -->
+    <div class="shadow__spot" translate="no"></div>
 
     <script>
+        // ========== 【新增】禁用页面滚动（PC+移动端） ==========
+        // 阻止移动端touchmove滑动
+        function preventTouchScroll(e) {
+            e.preventDefault();
+        }
+        // 绑定touchmove事件（passive: false 是关键，确保能阻止默认行为）
+        document.addEventListener('touchmove', preventTouchScroll, { passive: false });
+
+        // ========== 原有逻辑：模糊效果渐变 ==========
         const filterElem = document.querySelector('feGaussianBlur')
         const clearFilter = () => {
             const value = parseFloat(filterElem.getAttribute('stdDeviation').split(' ')[1]) - 0.06
@@ -228,8 +276,13 @@
                 return
             }
         }
-
         setTimeout(clearFilter, 300)
+
+        // ========== 原有逻辑：任意位置点击跳转 ==========
+		const targetUrl = 'home.html';
+		document.addEventListener('click', () => {
+			window.location.href = targetUrl;
+		});
     </script>
 </body>
 </html>

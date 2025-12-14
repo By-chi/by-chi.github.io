@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>By.chi的界面</title>
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366F1', // 主色调：柔和的靛蓝色
+            secondary: '#8B5CF6', // 辅助色：紫色
+            accent: '#EC4899', // 强调色：粉色
+            dark: {
+              bg: '#0F172A',
+              card: '#1E293B',
+              text: '#F8FAFC'
+            },
+            light: {
+              bg: '#F8FAFC',
+              card: '#FFFFFF',
+              text: '#1E293B'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Merriweather', 'Georgia', 'serif']
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.8s ease-in-out',
+            'slide-up': 'slideUp 0.6s ease-out',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- 自定义样式 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .bg-gradient-soft {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4eaf5 100%);
+      }
+      .dark .bg-gradient-soft {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300 min-h-screen">
+  <!-- 导航栏 -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-dark-card/80 backdrop-blur-md shadow-sm transition-all duration-300">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <a href="#" class="flex items-center space-x-2">
+          <span class="text-primary text-2xl"><i class="fa fa-feather"></i></span>
+          <span class="font-bold text-xl tracking-tight">By.chi</span>
+        </a>
+        
+        <!-- 桌面导航 -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="#" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors">首页</a>
+          <a href="#articles" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors">文章</a>
+          <a href="#about" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors">关于我</a>
+          <a href="#subscribe" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors">在其他平台关注</a>
+        </nav>
+        
+        <!-- 功能按钮 -->
+        <div class="flex items-center space-x-4">
+          <!-- 深色模式切换 -->
+          <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <i class="fa fa-moon-o dark:hidden text-gray-600"></i>
+            <i class="fa fa-sun-o hidden dark:block text-yellow-400"></i>
+          </button>
+          
+          <!-- 移动端菜单按钮 -->
+          <button id="mobile-menu-button" class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <i class="fa fa-bars text-gray-600 dark:text-gray-200"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white dark:bg-dark-card shadow-lg animate-fade-in">
+      <div class="container mx-auto px-4 py-3 space-y-3">
+        <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">首页</a>
+        <a href="#articles" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">文章</a>
+        <a href="#about" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">关于我</a>
+        <a href="#subscribe" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">在其他平台关注</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区 -->
+  <main class="pt-20 pb-16">
+    <!-- 英雄区域 -->
+    <section class="relative overflow-hidden bg-gradient-soft py-20 md:py-28">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center animate-slide-up">
+          <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold leading-tight text-shadow mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+            呦,稀客
+          </h1>
+          <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+            欢迎来到我的 Github Page 网页
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="#articles" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl">
+              浏览文章
+            </a>
+            <a href="#subscribe" class="px-6 py-3 bg-white dark:bg-dark-card text-primary border border-primary rounded-lg hover:bg-primary/5 dark:hover:bg-primary/10 transition-all shadow-md hover:shadow-lg">
+              关注
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 装饰元素 -->
+      <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+      <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
+    </section>
+    
+    <!-- 特色文章 -->
+    <section class="py-16">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-12 text-center">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">置顶</h2>
+          <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">shit里挑出来的稀世之宝</p>
+        </div>
+        
+        <div id="featured-articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        
+        <div class="mt-12 text-center">
+          <a href="#articles" class="inline-flex items-center px-5 py-2.5 text-primary border border-primary rounded-lg hover:bg-primary/5 dark:hover:bg-primary/10 transition-colors">
+            查看更多文章 <i class="fa fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 文章列表 -->
+    <section id="articles" class="py-16 bg-gray-50 dark:bg-dark-bg/50">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-12 text-center">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">所有文章</h2>
+          <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">猴子排序的文章列表</p>
+        </div>
+        
+        <!-- 文章列表 -->
+        <div id="all-articles" class="space-y-6 max-w-4xl mx-auto">
+		  <!-- 动态渲染的列表项会插入这里 -->
+		</div>
+        
+        <!-- 分页 -->
+        <div class="mt-12 flex justify-center">
+          <nav id="pagination" nav class="inline-flex rounded-lg shadow-md overflow-hidden">
+            <a href="#" class="px-4 py-2 bg-white dark:bg-dark-card text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
+              <i class="fa fa-chevron-left"></i>
+            </a>
+            <a href="#" class="px-4 py-2 bg-primary text-white">1</a>
+            <a href="#" class="px-4 py-2 bg-white dark:bg-dark-card text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 border-r border-gray-200 dark:border-gray-700">2</a>
+            <a href="#" class="px-4 py-2 bg-white dark:bg-dark-card text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 border-r border-gray-200 dark:border-gray-700">3</a>
+            <a href="#" class="px-4 py-2 bg-white dark:bg-dark-card text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800">
+              <i class="fa fa-chevron-right"></i>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 关于作者 -->
+    <section id="about" class="py-16">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+          <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/3">
+              <div class="relative">
+                <img src="icon.jpg" alt="icon" class="w-full rounded-2xl shadow-xl">
+                <div class="absolute -bottom-4 -right-4 bg-primary text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl">
+                  <i class="fa fa-quote-left"></i>
+                </div>
+              </div>
+            </div>
+            <div class="md:w-2/3">
+              <h2 class="text-3xl font-bold mb-6">关于我</h2>
+              <p class="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
+                你好，我是By-chi
+              </p>
+              <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                这个网页是瞎写的
+              </p>
+              <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                目前学习Godot的游戏/软件项目
+              </p>
+              
+              <!-- 社交媒体链接 -->
+              <div class="flex space-x-4">
+                <!-- GitHub -->
+				  <a href="https://github.com/By-chi" class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-all">
+					 <i class="fa fa-github"></i>
+				  </a>
+				  <a href="https://space.bilibili.com/1909594131" target="_blank" rel="noopener noreferrer" class="w-10 h-10 inline-flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#FB7299] rounded-full transition-all">
+				   <span class="font-bold text-xs">B</span>
+				  </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="subscribe" class="py-16 bg-gradient-to-r from-primary/10 to-secondary/10 dark:from-primary/20 dark:to-secondary/20">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl mx-auto text-center">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">关注</h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-8">
+            No! This is a static web page,所以你不能关注,试试其他平台吧
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-gray-900 text-gray-300 py-12">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <div class="flex items-center space-x-2 mb-4">
+            <span class="text-primary text-2xl"><i class="fa fa-feather"></i></span>
+            <span class="font-bold text-xl text-white tracking-tight">By-chi</span>
+          </div>
+          <p class="text-gray-400 mb-4">
+            刷到低了,看看别的平台吧~
+          </p>
+			  <div class="flex space-x-4">
+				  <!-- GitHub -->
+				  <a href="https://github.com/By-chi" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+					<i class="fa fa-github"></i>
+				  </a>
+				  <a href="https://space.bilibili.com/1909594131" target="_blank" rel="noopener noreferrer" class="w-6 h-6 inline-flex items-center justify-center text-gray-400 hover:text-white hover:bg-[#FB7299] rounded-full transition-all">
+				   <span class="font-bold text-xs">B</span>
+				  </a>
+			</div>
+        </div>
+        
+        <div>
+          <h3 class="text-white font-bold mb-4">传送门</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+            <li><a href="#articles" class="text-gray-400 hover:text-white transition-colors">文章</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我</a></li>
+            <li><a href="#subscribe" class="text-gray-400 hover:text-white transition-colors">关注</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-white font-bold mb-4">联系方式</h3>
+          <ul class="space-y-2">
+            <li class="flex items-center space-x-2">
+              <i class="fa fa-qq text-primary"></i>
+              <span>2760722960</span>
+            </li>
+			
+			<li class="flex items-center space-x-2">
+              <i class="fa fa-envelope-o text-primary"></i>
+              <span>by.chi@outlook.com</span>
+            </li>
+            <li class="flex items-center space-x-2">
+              <i class="fa fa-map-marker text-primary"></i>
+              <span>辽宁昌图</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 pt-8 mt-8 text-center text-gray-500">
+        <p>&copy; 2025 By-chi. 保留所有权利。</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 返回顶部按钮 -->
+  <button id="back-to-top" class="fixed bottom-6 right-6 w-12 h-12 bg-primary text-white rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all hover:bg-primary/90">
+    <i class="fa fa-chevron-up"></i>
+  </button>
+
+  <!-- JavaScript -->
+  <script>
+		// ========== 1. 硬编码文章数据（不变） ==========
+	const articlesData = [
+	  { id: 1, title: "GridPathLock", summary: "一款3D网格关卡解密游戏 (Godot 4.6 dev3)", category: "Godot 3d游戏", categoryColor: "primary", date: "2025.12.7", cover: "GridPathLock.png", author: "By.chi", authorAvatar: "icon.jpg" },
+	  { id: 2, title: "小球领土战争", summary: "小球领土战争实时模拟", category: "Godot 程序", categoryColor: "secondary", date: "2025.10.5", cover: "Particle-Territorial-War.png", author: "By.chi", authorAvatar: "icon.jpg" },
+	  { id: 3, title: "Geocrewlo", summary: "由简单图形组成的一款2d俯视角射击游戏", category: "Godot 2d游戏", categoryColor: "accent", date: "2025.8.24", cover: "Geocrewlo.png", author: "By.chi", authorAvatar: "icon.jpg" },
+	  { id: 4, title: "Mudot", summary: "一个能够播放和编辑音乐包，并包含额外脚本的项目", category: "Godot 音乐应用", categoryColor: "primary", date: "2025.7.20", cover: "Mudot.png", author: "By.chi", authorAvatar: "icon.jpg" },
+	  { id: 5, title: "MineSweeper[Godot版]", summary: "无它", category: "Godot 复刻", categoryColor: "secondary", date: "2024.09.22", cover: "MineSweeper[Godot版].png", author: "By.chi", authorAvatar: "icon.jpg" },
+	  { id: 6, title: "Godot 悬浮窗MC风格性能监视小工具", summary: "无它", category: "Godot 程序", categoryColor: "secondary", date: "2025.2.19", cover: "GodotMC.png", author: "By.chi", authorAvatar: "icon.jpg" },
+	];
+
+	// ========== 2. 分页全局变量 + 初始调试日志 ==========
+	let currentPage = 1; // 当前页码
+	const pageSize = 4; // 每页显示4篇
+	const totalPages = Math.ceil(articlesData.length / pageSize); // 总页数
+	console.log('===== 初始分页参数 =====');
+	console.log('文章总数：', articlesData.length);
+	console.log('每页数量：', pageSize);
+	console.log('总页数：', totalPages);
+	console.log('初始页码：', currentPage);
+
+	// ========== 3. 渲染文章函数（加调试日志） ==========
+	function renderArticles() {
+	  console.log('\n===== 开始渲染文章 =====');
+	  console.log('当前页码：', currentPage);
+	  try {
+		// 1. 分页筛选 + 调试
+		const startIndex = (currentPage - 1) * pageSize;
+		const endIndex = startIndex + pageSize;
+		console.log('分页切片范围：', `start=${startIndex}, end=${endIndex}`);
+		const paginatedArticles = articlesData.slice(startIndex, endIndex);
+		console.log('当前页文章数据：', paginatedArticles);
+
+		// 2. 渲染特色文章 + 调试
+		const featuredContainer = document.getElementById('featured-articles');
+		console.log('特色文章容器是否存在：', !!featuredContainer);
+		if (!featuredContainer) throw new Error("特色文章容器未找到");
+		const featuredArticles = articlesData.slice(0, 3);
+		featuredContainer.innerHTML = featuredArticles.map(article => `
+		  <article class="bg-white dark:bg-dark-card rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all card-hover">
+			<div class="relative h-48 overflow-hidden">
+			  <img src="${article.cover}" alt="${article.title}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+			  <div class="absolute top-4 left-4 bg-${article.categoryColor}/90 text-white text-xs px-3 py-1 rounded-full">
+				${article.category}
+			  </div>
+			</div>
+			<div class="p-6">
+			  <h3 class="text-xl font-bold mb-3 hover:text-primary transition-colors">
+				<a href="article.html?id=${article.id}">${article.title}</a>
+			  </h3>
+			  <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+				${article.summary}
+			  </p>
+			  <div class="flex justify-between items-center">
+				<div class="flex items-center space-x-2">
+				  <img src="${article.authorAvatar}" alt="${article.author}" class="w-8 h-8 rounded-full object-cover">
+				  <span class="text-sm text-gray-500 dark:text-gray-500">${article.author}</span>
+				</div>
+				<span class="text-sm text-gray-500 dark:text-gray-500">${article.date}</span>
+			  </div>
+			</div>
+		  </article>
+		`).join('');
+
+		// 3. 渲染分页文章列表 + 调试
+		const allContainer = document.getElementById('all-articles');
+		console.log('全部文章容器是否存在：', !!allContainer);
+		if (!allContainer) throw new Error("全部文章容器未找到");
+		allContainer.innerHTML = paginatedArticles.map(article => `
+		  <div class="bg-white dark:bg-dark-card rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all card-hover">
+			<div class="flex flex-col md:flex-row">
+			  <div class="md:w-1/3 h-48 md:h-auto relative overflow-hidden">
+				<img src="${article.cover}" alt="${article.title}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+			  </div>
+			  <div class="md:w-2/3 p-6">
+				<div class="flex items-center space-x-2 mb-3">
+				  <span class="text-xs bg-${article.categoryColor}/10 text-${article.categoryColor} px-2 py-1 rounded-full">${article.category}</span>
+				  <span class="text-xs text-gray-500 dark:text-gray-500">${article.date}</span>
+				</div>
+				<h3 class="text-xl font-bold mb-2 hover:text-primary transition-colors">
+				  <a href="article.html?id=${article.id}">${article.title}</a>
+				</h3>
+				<p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+				  ${article.summary}
+				</p>
+				<a href="article.html?id=${article.id}" class="inline-flex items-center text-primary font-medium hover:text-primary/80 transition-colors">
+				  阅读全文 <i class="fa fa-long-arrow-right ml-2"></i>
+				</a>
+			  </div>
+			</div>
+		  </div>
+		`).join('');
+
+		// 4. 更新分页UI + 调试
+		updatePaginationUI(currentPage);
+		console.log('文章渲染完成 ✅');
+	  } catch (err) {
+		console.error("渲染文章失败 ❌：", err);
+		// 兜底提示
+		const featuredContainer = document.getElementById('featured-articles');
+		if (featuredContainer) featuredContainer.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400">文章加载失败</p>';
+		const allContainer = document.getElementById('all-articles');
+		if (allContainer) allContainer.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400">文章加载失败</p>';
+	  }
+	}
+
+	// ========== 4. 更新分页UI（加调试日志） ==========
+	function updatePaginationUI(currentPage) {
+	  console.log('\n===== 更新分页按钮 =====');
+	  console.log('当前页码（更新UI）：', currentPage);
+	  const paginationContainer = document.getElementById('pagination');
+	  console.log('分页容器是否存在：', !!paginationContainer);
+	  if (!paginationContainer) return;
+
+	  // 生成分页按钮HTML（修改href为javascript:void(0)）
+	  let paginationHTML = `
+		<a href="javascript:void(0)" class="px-4 py-2 bg-white dark:bg-dark-card text-gray-500 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 dark:hover:bg-gray-800'} border-r border-gray-200 dark:border-gray-700" id="prev-page">
+		  <i class="fa fa-chevron-left"></i>
+		</a>
+	  `;
+
+	  // 生成页码按钮（同样修改href）
+	  for (let i = 1; i <= totalPages; i++) {
+		paginationHTML += `
+		  <a href="javascript:void(0)" class="px-4 py-2 ${i === currentPage ? 'bg-primary text-white' : 'bg-white dark:bg-dark-card text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'} border-r border-gray-200 dark:border-gray-700" data-page="${i}">
+			${i}
+		  </a>
+		`;
+	  }
+
+	  // 下一页按钮（修改href）
+	  paginationHTML += `
+		<a href="javascript:void(0)" class="px-4 py-2 bg-white dark:bg-dark-card text-gray-500 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}" id="next-page">
+		  <i class="fa fa-chevron-right"></i>
+		</a>
+	  `;
+
+	  paginationContainer.innerHTML = paginationHTML;
+	  console.log('分页按钮更新完成 ✅');
+	}
+
+	// ========== 5. 分页事件委托（加调试日志） ==========
+	function bindPaginationEvents() {
+	  console.log('\n===== 绑定分页事件 =====');
+	  const paginationContainer = document.getElementById('pagination');
+	  console.log('分页容器（绑定事件）是否存在：', !!paginationContainer);
+	  if (!paginationContainer) return;
+
+	  // 事件委托：监听分页容器内所有点击
+	  paginationContainer.addEventListener('click', (e) => {
+		e.preventDefault(); 
+		e.stopPropagation(); // 新增：阻止事件冒泡
+		console.log('\n===== 分页按钮被点击 =====');
+		const target = e.target.closest('a');
+		console.log('点击的目标元素：', target);
+		if (!target) {
+		  console.log('未点击到分页按钮 ❌');
+		  return;
+		}
+
+		// 先保存当前滚动位置（可选，也可直接定位到文章列表）
+		let scrollTop = window.scrollY;
+		let shouldScroll = true; // 是否需要定位到文章列表
+
+		// 处理上一页
+		if (target.id === 'prev-page') {
+		  console.log('点击：上一页 | 当前页码：', currentPage);
+		  if (currentPage > 1) {
+			currentPage--;
+			console.log('上一页后页码：', currentPage);
+			renderArticles();
+		  } else {
+			console.log('已经是第一页，无法上一页 ❌');
+			shouldScroll = false; // 无需滚动
+		  }
+		}
+
+		// 处理下一页
+		else if (target.id === 'next-page') {
+		  console.log('点击：下一页 | 当前页码：', currentPage);
+		  if (currentPage < totalPages) {
+			currentPage++;
+			console.log('下一页后页码：', currentPage);
+			renderArticles();
+		  } else {
+			console.log('已经是最后一页，无法下一页 ❌');
+			shouldScroll = false; // 无需滚动
+		  }
+		}
+
+		// 处理页码按钮
+		else if (target.dataset.page) {
+		  const page = parseInt(target.dataset.page);
+		  console.log('点击：页码按钮 | 目标页码：', page, '| 当前页码：', currentPage);
+		  if (!isNaN(page) && page !== currentPage) {
+			currentPage = page;
+			console.log('切换页码后：', currentPage);
+			renderArticles();
+		  } else if (page === currentPage) {
+			console.log('已在当前页码，无需切换 ❌');
+			shouldScroll = false; // 无需滚动
+		  } else {
+			console.log('无效页码 ❌：', page);
+			shouldScroll = false;
+		  }
+		}
+
+		// 渲染完成后，滚动到文章列表顶部（核心：解决视角乱跳）
+		if (shouldScroll) {
+		  setTimeout(() => {
+			const articlesSection = document.getElementById('articles');
+			if (articlesSection) {
+			  // 平滑滚动到文章列表顶部（偏移20px，避免贴顶）
+			  articlesSection.scrollIntoView({ 
+				behavior: 'smooth', 
+				block: 'start',
+				inline: 'nearest'
+			  });
+			}
+		  }, 100); // 延迟100ms，确保DOM渲染完成
+		}
+	  });
+	}
+
+	// ========== 6. 所有初始化逻辑（加调试日志） ==========
+	window.addEventListener('DOMContentLoaded', () => {
+	  console.log('\n===== 页面加载完成，初始化 =====');
+	  
+	  // 1. 绑定分页事件（仅绑定一次）
+	  bindPaginationEvents();
+	  
+	  // 2. 渲染文章
+	  renderArticles();
+
+	  // --- 其他逻辑（深色模式、菜单等，不变） ---
+	  const themeToggle = document.getElementById('theme-toggle');
+	  const html = document.documentElement;
+	  if (localStorage.getItem('theme') !== 'light') {
+		html.classList.add('dark');
+	  }
+	  if (themeToggle) {
+		themeToggle.addEventListener('click', () => {
+		  html.classList.toggle('dark');
+		  localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+		});
+	  }
+
+	  const mobileMenuButton = document.getElementById('mobile-menu-button');
+	  const mobileMenu = document.getElementById('mobile-menu');
+	  if (mobileMenuButton && mobileMenu) {
+		mobileMenuButton.addEventListener('click', () => {
+		  mobileMenu.classList.toggle('hidden');
+		});
+	  }
+
+	  const header = document.querySelector('header');
+	  window.addEventListener('scroll', () => {
+		if (header) {
+		  if (window.scrollY > 50) {
+			header.classList.add('shadow-md');
+			header.classList.remove('shadow-sm');
+		  } else {
+			header.classList.remove('shadow-md');
+			header.classList.add('shadow-sm');
+		  }
+		}
+	  });
+
+	  const backToTopButton = document.getElementById('back-to-top');
+	  if (backToTopButton) {
+		window.addEventListener('scroll', () => {
+		  if (window.scrollY > 300) {
+			backToTopButton.classList.remove('opacity-0', 'invisible');
+			backToTopButton.classList.add('opacity-100', 'visible');
+		  } else {
+			backToTopButton.classList.add('opacity-0', 'invisible');
+			backToTopButton.classList.remove('opacity-100', 'visible');
+		  }
+		});
+		backToTopButton.addEventListener('click', () => {
+		  window.scrollTo({ top: 0, behavior: 'smooth' });
+		});
+	  }
+
+	  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+		anchor.addEventListener('click', function (e) {
+		  e.preventDefault();
+		  const targetId = this.getAttribute('href');
+		  if (targetId === '#') return;
+		  const targetElement = document.querySelector(targetId);
+		  if (targetElement) {
+			mobileMenu?.classList.add('hidden');
+			targetElement.scrollIntoView({ behavior: 'smooth' });
+		  }
+		});
+	  });
+
+	  document.querySelectorAll('img').forEach(img => {
+		img.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+		const loadImg = () => {
+		  img.classList.remove('opacity-0');
+		  img.classList.add('opacity-100');
+		};
+		img.addEventListener('load', loadImg);
+		if (img.complete) loadImg();
+	  });
+	});
+  </script>
+</body>
+</html>

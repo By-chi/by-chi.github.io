@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章详情 | Godot 项目集</title>
+  <!-- 引入资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#6366F1',
+            secondary: '#8B5CF6',
+            accent: '#EC4899',
+            dark: {
+              bg: '#0F172A',
+              card: '#1E293B',
+              text: '#F8FAFC'
+            },
+            light: {
+              bg: '#F8FAFC',
+              card: '#FFFFFF',
+              text: '#1E293B'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Merriweather', 'Georgia', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto { content-visibility: auto; }
+      .prose-custom {
+        line-height: 1.8;
+        font-size: 16px;
+      }
+      .prose-custom h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 1.5rem 0 1rem;
+        color: #6366F1;
+        dark:color #8B5CF6;
+      }
+      .prose-custom p {
+        margin-bottom: 1rem;
+        color: #4B5563;
+        dark:color #E5E7EB;
+      }
+      .prose-custom img {
+        max-width: 100%;
+        border-radius: 8px;
+        margin: 1.5rem auto;
+        display: block;
+      }
+      .prose-custom pre {
+        background: #1E293B;
+        color: #F8FAFC;
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 1rem 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300 min-h-screen">
+  <!-- 导航栏 -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-dark-card/80 backdrop-blur-md shadow-sm transition-all duration-300">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <a href="home.html" class="flex items-center space-x-2">
+          <span class="text-primary text-2xl"><i class="fa fa-gamepad"></i></span>
+          <span class="font-bold text-xl">Godot 项目集</span>
+        </a>
+        
+        <!-- 深色模式切换 -->
+        <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="fa fa-moon-o dark:hidden"></i>
+          <i class="fa fa-sun-o hidden dark:block"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 文章主体 -->
+  <main class="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+    <!-- 面包屑导航 -->
+    <div class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <a href="home.html" class="hover:text-primary transition-colors">首页</a>
+      <span class="mx-2">/</span>
+      <span id="article-category">Godot 3d游戏</span>
+      <span class="mx-2">/</span>
+      <span id="article-title-short">文章详情</span>
+    </div>
+
+    <!-- 文章内容区域 -->
+    <div class="max-w-3xl mx-auto bg-white dark:bg-dark-card rounded-xl shadow-lg p-6 md:p-8 mb-8">
+      <!-- 文章标题 -->
+      <h1 id="article-title" class="text-3xl md:text-4xl font-bold mb-6 text-center"></h1>
+      
+      <!-- 文章元信息 -->
+      <div class="flex flex-wrap justify-center items-center gap-4 mb-8 text-gray-600 dark:text-gray-400">
+        <div class="flex items-center">
+          <img id="author-avatar" src="" alt="作者头像" class="w-8 h-8 rounded-full mr-2">
+          <span id="author-name"></span>
+        </div>
+        <div class="flex items-center">
+          <i class="fa fa-calendar-o mr-1"></i>
+          <span id="article-date"></span>
+        </div>
+        <div class="flex items-center">
+          <i class="fa fa-folder-o mr-1"></i>
+          <span id="article-category-tag"></span>
+        </div>
+      </div>
+      
+      <!-- 文章封面图（新增：显示游戏封面） -->
+      <div class="mb-8 text-center">
+        <img id="article-cover" src="" alt="文章封面" class="max-w-full rounded-xl shadow-md">
+      </div>
+      
+      <!-- 文章正文 -->
+      <div id="article-content" class="prose-custom"></div>
+    </div>
+
+    <!-- 上/下篇导航 -->
+    <div class="max-w-3xl mx-auto flex justify-between items-center mb-16">
+      <div id="prev-article" class="flex-1 mr-4">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">上一篇</p>
+        <a href="#" class="text-primary hover:underline block" id="prev-article-link">没有上一篇</a>
+      </div>
+      <div id="next-article" class="flex-1 ml-4 text-right">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">下一篇</p>
+        <a href="#" class="text-primary hover:underline block" id="next-article-link">没有下一篇</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-gray-100 dark:bg-dark-bg/80 py-8">
+    <div class="container mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
+      <p>© 2025 Godot 项目集 | By.chi All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- 返回顶部按钮 -->
+  <button id="back-to-top" class="fixed bottom-8 right-8 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-lg opacity-0 invisible transition-all hover:bg-primary/90">
+    <i class="fa fa-arrow-up"></i>
+  </button>
+
+  <!-- 核心脚本 -->
+  <script>
+    // 1. 游戏项目数据（已预留content正文字段，按需填充）
+    const articlesData = [
+      { 
+        id: 1, 
+        title: "GridPathLock", 
+        summary: "一款3D网格关卡解密游戏 (Godot 4.6 dev3)", 
+        category: "Godot 3d游戏", 
+        categoryColor: "primary", 
+        date: "2025.12.7", 
+        cover: "GridPathLock.png", 
+        author: "By.chi", 
+        authorAvatar: "icon.jpg",
+        // ========== 正文占位区（可删除注释，填充内容） ==========
+        content: `
+          <h2>游戏介绍</h2>
+          <p>你可以以一个方块的方式向4个方向前进,但你无法回到上一个地方,并且走过的空地会变成障碍,你必须打开所以开关,走过所有空地,才可以从终点出去</p>
+
+          <h2>源码/下载</h2>
+          <p a=https://github.com/By-chi/GridPathLock/tree/Separate-steam>Github源码</p>
+        `
+      },
+      { 
+        id: 2, 
+        title: "小球领土战争", 
+        summary: "小球领土战争实时模拟", 
+        category: "Godot 程序", 
+        categoryColor: "secondary", 
+        date: "2025.10.5", 
+        cover: "Particle-Territorial-War.png", 
+        author: "By.chi", 
+        authorAvatar: "icon.jpg",
+        // ========== 正文占位区 ==========
+        content: `
+          <h2>项目说明</h2>
+          <p>模仿+复刻网上很火的小球领土战争</p>
+          
+          <h2>核心技术点</h2>
+          <ul class="list-disc pl-6 mb-4">
+            <li>实时模拟逻辑实现</li>
+          </ul>
+          <h2>源码/下载</h2>
+          <p a=https://github.com/By-chi/Particle-Territorial-War>Github源码</p>
+          
+        `
+      },
+      { 
+        id: 3, 
+        title: "Geocrewlo", 
+        summary: "由简单图形组成的一款2d俯视角射击游戏", 
+        category: "Godot 2d游戏", 
+        categoryColor: "accent", 
+        date: "2025.8.24", 
+        cover: "Geocrewlo.png", 
+        author: "By.chi", 
+        authorAvatar: "icon.jpg",
+        // ========== 正文占位区 ==========
+        content: `
+          <h2>游戏玩法</h2>
+          <p>类似于FPS多人单机对战,但是人机很厉害</p>
+          
+          
+          <h2>源码/下载</h2>
+          <p a=https://github.com/By-chi/Geocrewlo>Github源码</p>
+        `
+      },
+      { 
+        id: 4, 
+        title: "Mudot", 
+        summary: "一个能够播放和编辑音乐包，并包含额外脚本的项目", 
+        category: "Godot 音乐应用", 
+        categoryColor: "primary", 
+        date: "2025.7.20", 
+        cover: "Mudot.png", 
+        author: "By.chi", 
+        authorAvatar: "icon.jpg",
+        // ========== 正文占位区 ==========
+        content: `
+          <h2>功能介绍</h2>
+          <p>你可以制作音乐包和播放音乐包,可以实现很酷的播放器</p>
+          
+          
+          <h2>源码/下载</h2>
+          <p a=https://github.com/By-chi/Mudot>Github源码</p>
+        `
+      },
+      { 
+        id: 5, 
+        title: "MineSweeper[Godot版]", 
+        summary: "无它", 
+        category: "Godot 复刻", 
+        categoryColor: "secondary", 
+        date: "2024.09.22", 
+        cover: "MineSweeper[Godot版].png", 
+        author: "By.chi", 
+        authorAvatar: "icon.jpg",
+        // ========== 正文占位区 ==========
+        content: `
+          <h2>复刻说明</h2>
+          <p>经典扫雷游戏的Godot实现版本</p>
+          
+          <h2>下载</h2>
+          <p a=https://pan.baidu.com/s/17cBWGmV8cCOYKEjSgOQmnA?pwd=tv2v>百度网盘下载</p>
+        `
+      },
+      { 
+        id: 6, 
+        title: "Godot 悬浮窗MC风格性能监视小工具", 
+        summary: "无它", 
+        category: "Godot 程序", 
+        categoryColor: "secondary", 
+        date: "2025.2.19", 
+        cover: "GodotMC.png", 
+        author: "By.chi", 
+        authorAvatar: "icon.jpg",
+        // ========== 正文占位区 ==========
+        content: `
+          <h2>工具介绍</h2>
+          <p>MC风格的Godot性能监视悬浮窗工具</p>
+          
+          <h2>监视指标</h2>
+          <ul class="list-disc pl-6 mb-4">
+            <li>帧率（FPS）</li>
+            <li>内存占用</li>
+            <li>CPU使用率</li>
+            <li>...</li>
+          </ul>
+          
+          <h2>下载</h2>
+          <p a=https://wwwp.lanzout.com/i6pYz2oad7re>lanzout下载</p>
+        `
+      }
+    ];
+
+    // 2. 解析URL中的文章ID
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = parseInt(urlParams.get('id'));
+    const currentArticle = articlesData.find(item => item.id === articleId);
+
+    // 3. 渲染文章内容
+    if (currentArticle) {
+      // 更新页面标题
+      document.title = `${currentArticle.title} | Godot 项目集`;
+      // 渲染基础信息
+      document.getElementById('article-title').textContent = currentArticle.title;
+      document.getElementById('article-title-short').textContent = currentArticle.title;
+      document.getElementById('author-avatar').src = currentArticle.authorAvatar;
+      document.getElementById('author-name').textContent = currentArticle.author;
+      document.getElementById('article-date').textContent = currentArticle.date;
+      document.getElementById('article-category').textContent = currentArticle.category;
+      document.getElementById('article-category-tag').textContent = currentArticle.category;
+      // 渲染封面图
+      document.getElementById('article-cover').src = currentArticle.cover;
+      document.getElementById('article-cover').alt = currentArticle.title + "封面";
+      // 渲染正文
+      document.getElementById('article-content').innerHTML = currentArticle.content;
+
+      // 4. 渲染上/下篇导航
+      const currentIndex = articlesData.findIndex(item => item.id === articleId);
+      // 上一篇
+      const prevArticle = currentIndex > 0 ? articlesData[currentIndex - 1] : null;
+      if (prevArticle) {
+        document.getElementById('prev-article-link').href = `article.html?id=${prevArticle.id}`;
+        document.getElementById('prev-article-link').textContent = prevArticle.title;
+      } else {
+        document.getElementById('prev-article-link').textContent = "没有上一篇";
+        document.getElementById('prev-article-link').removeAttribute('href');
+        document.getElementById('prev-article-link').classList.add('text-gray-400', 'cursor-not-allowed');
+        document.getElementById('prev-article-link').classList.remove('text-primary', 'hover:underline');
+      }
+      // 下一篇
+      const nextArticle = currentIndex < articlesData.length - 1 ? articlesData[currentIndex + 1] : null;
+      if (nextArticle) {
+        document.getElementById('next-article-link').href = `article.html?id=${nextArticle.id}`;
+        document.getElementById('next-article-link').textContent = nextArticle.title;
+      } else {
+        document.getElementById('next-article-link').textContent = "没有下一篇";
+        document.getElementById('next-article-link').removeAttribute('href');
+        document.getElementById('next-article-link').classList.add('text-gray-400', 'cursor-not-allowed');
+        document.getElementById('next-article-link').classList.remove('text-primary', 'hover:underline');
+      }
+    } else {
+      // 文章不存在兜底
+      document.getElementById('article-content').innerHTML = `
+        <div class="text-center py-10">
+          <i class="fa fa-exclamation-circle text-4xl text-red-500 mb-4"></i>
+          <h3 class="text-xl font-bold mb-2">文章不存在</h3>
+          <p class="text-gray-500 mb-4">你访问的文章可能已被删除或ID错误</p>
+          <a href="home.html" class="inline-block px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90">返回首页</a>
+        </div>
+      `;
+      document.getElementById('prev-article').style.display = 'none';
+      document.getElementById('next-article').style.display = 'none';
+    }
+
+    // 4. 深色模式切换
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') !== 'light') {
+      html.classList.add('dark');
+    }
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        html.classList.toggle('dark');
+        localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+      });
+    }
+
+    // 5. 返回顶部按钮
+    const backToTopButton = document.getElementById('back-to-top');
+    if (backToTopButton) {
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+          backToTopButton.classList.remove('opacity-0', 'invisible');
+          backToTopButton.classList.add('opacity-100', 'visible');
+        } else {
+          backToTopButton.classList.add('opacity-0', 'invisible');
+          backToTopButton.classList.remove('opacity-100', 'visible');
+        }
+      });
+      backToTopButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // 6. 图片加载动画
+    document.querySelectorAll('img').forEach(img => {
+      img.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+      const loadImg = () => {
+        img.classList.remove('opacity-0');
+        img.classList.add('opacity-100');
+      };
+      img.addEventListener('load', loadImg);
+      if (img.complete) loadImg();
+    });
+  </script>
+</body>
+</html>
