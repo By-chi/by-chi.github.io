@@ -1,0 +1,347 @@
+/* 基础样式 */
+:root {
+    --primary-color: #4a6fa5;
+    --secondary-color: #166088;
+    --accent-color: #6a994e;
+    --light-bg: #f8f9fa;
+    --dark-text: #333;
+    --light-text: #666;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--dark-text);
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+/* 导航栏 */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: var(--dark-text);
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+/* 英雄区域 */
+.hero-section {
+    padding: 120px 0 80px;
+    background: linear-gradient(rgba(74, 111, 165, 0.9), rgba(22, 96, 136, 0.9)),
+                url('assets/images/hero-bg.jpg') center/cover;
+    color: white;
+    text-align: center;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.hero-section .lead {
+    font-size: 1.5rem;
+    opacity: 0.9;
+}
+
+/* 模块区域 */
+.module-section {
+    margin: 60px 0;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.module-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--accent-color);
+    display: inline-block;
+}
+
+.module-section h2 i {
+    margin-right: 10px;
+}
+
+/* 统计卡片 */
+.stats-card {
+    background: var(--light-bg);
+    padding: 30px;
+    border-radius: 15px;
+    height: 100%;
+    transition: transform 0.3s;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+}
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: var(--light-text);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* 卡片样式 */
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s;
+    height: 100%;
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-body {
+    padding: 25px;
+}
+
+/* 地图容器 */
+#map {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* 倒计时 */
+.countdown {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+#countdown-timer {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* 页脚 */
+footer {
+    background: var(--secondary-color);
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.footer-links a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.footer-links a:hover {
+    opacity: 0.8;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1.2rem;
+    }
+    
+    .module-section {
+        padding: 30px 15px;
+    }
+    
+    .stat-value {
+        font-size: 1.8rem;
+    }
+    
+    #countdown-timer {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section {
+        padding: 100px 0 60px;
+    }
+    
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .module-section {
+        margin: 40px 0;
+    }
+}
+/* 图片放大模态框样式 */
+.image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-modal.show {
+    opacity: 1;
+}
+
+.modal-image-container {
+    max-width: 90%;
+    max-height: 90%;
+    position: relative;
+}
+
+.modal-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: #4a6fa5;
+}
+
+.modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.modal-nav:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-prev {
+    left: -60px;
+}
+
+.modal-next {
+    right: -60px;
+}
+
+.modal-caption {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+}
+
+/* 可点击放大的图片样式 */
+.zoomable-image {
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+}
+
+.zoomable-image:hover {
+    transform: scale(1.02);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .modal-prev {
+        left: 10px;
+    }
+    
+    .modal-next {
+        right: 10px;
+    }
+    
+    .modal-close {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .modal-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+    }
+}

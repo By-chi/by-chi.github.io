@@ -233,7 +233,7 @@
 </head>
 
 <body>
-    <!-- 动画容器：仅此区域禁用翻译 -->
+    
     <div class="container" translate="no">
         <span class="delay">By.</span>
         <div class="letter">
@@ -253,19 +253,19 @@
         <span class="delay">hi</span>
     </div>
 
-    <!-- 遮罩层：仅此区域禁用翻译 -->
+    
     <div class="shadow__spot" translate="no"></div>
 
     <script>
-        // ========== 【新增】禁用页面滚动（PC+移动端） ==========
-        // 阻止移动端touchmove滑动
+        
+        
         function preventTouchScroll(e) {
             e.preventDefault();
         }
-        // 绑定touchmove事件（passive: false 是关键，确保能阻止默认行为）
+        
         document.addEventListener('touchmove', preventTouchScroll, { passive: false });
 
-        // ========== 原有逻辑：模糊效果渐变 ==========
+        
         const filterElem = document.querySelector('feGaussianBlur')
         const clearFilter = () => {
             const value = parseFloat(filterElem.getAttribute('stdDeviation').split(' ')[1]) - 0.06
@@ -278,7 +278,7 @@
         }
         setTimeout(clearFilter, 300)
 
-        // ========== 原有逻辑：任意位置点击跳转 ==========
+        
 		const targetUrl = 'home.html';
 		document.addEventListener('click', () => {
 			window.location.href = targetUrl;

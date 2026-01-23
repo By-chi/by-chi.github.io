@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>By.chi的界面</title>
-  <!-- 引入外部资源 -->
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
   
-  <!-- Tailwind 配置 -->
+  
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            primary: '#6366F1', // 主色调：柔和的靛蓝色
-            secondary: '#8B5CF6', // 辅助色：紫色
-            accent: '#EC4899', // 强调色：粉色
+            primary: '#6366F1', 
+            secondary: '#8B5CF6', 
+            accent: '#EC4899', 
             dark: {
               bg: '#0F172A',
               card: '#1E293B',
@@ -53,7 +53,7 @@
     }
   </script>
   
-  <!-- 自定义样式 -->
+  
   <style type="text/tailwindcss">
     @layer utilities {
       .content-auto {
@@ -86,17 +86,17 @@
 </head>
 
 <body class="bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text transition-colors duration-300 min-h-screen">
-  <!-- 导航栏 -->
+  
   <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-dark-card/80 backdrop-blur-md shadow-sm transition-all duration-300">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
-        <!-- Logo -->
+        
         <a href="#" class="flex items-center space-x-2">
           <span class="text-primary text-2xl"><i class="fa fa-feather"></i></span>
           <span class="font-bold text-xl tracking-tight">By.chi</span>
         </a>
         
-        <!-- 桌面导航 -->
+        
         <nav class="hidden md:flex items-center space-x-8">
           <a href="#" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors">首页</a>
           <a href="#articles" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors">文章</a>
@@ -104,15 +104,15 @@
           <a href="#subscribe" class="text-gray-700 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors">在其他平台关注</a>
         </nav>
         
-        <!-- 功能按钮 -->
+        
         <div class="flex items-center space-x-4">
-          <!-- 深色模式切换 -->
+          
           <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
             <i class="fa fa-moon-o dark:hidden text-gray-600"></i>
             <i class="fa fa-sun-o hidden dark:block text-yellow-400"></i>
           </button>
           
-          <!-- 移动端菜单按钮 -->
+          
           <button id="mobile-menu-button" class="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
             <i class="fa fa-bars text-gray-600 dark:text-gray-200"></i>
           </button>
@@ -120,7 +120,7 @@
       </div>
     </div>
     
-    <!-- 移动端导航菜单 -->
+    
     <div id="mobile-menu" class="md:hidden hidden bg-white dark:bg-dark-card shadow-lg animate-fade-in">
       <div class="container mx-auto px-4 py-3 space-y-3">
         <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">首页</a>
@@ -131,9 +131,9 @@
     </div>
   </header>
 
-  <!-- 主内容区 -->
+  
   <main class="pt-20 pb-16">
-    <!-- 英雄区域 -->
+    
     <section class="relative overflow-hidden bg-gradient-soft py-20 md:py-28">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto text-center animate-slide-up">
@@ -154,12 +154,12 @@
         </div>
       </div>
       
-      <!-- 装饰元素 -->
+      
       <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
       <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
     </section>
     
-    <!-- 特色文章 -->
+    
     <section class="py-16">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-12 text-center">
@@ -177,7 +177,7 @@
       </div>
     </section>
     
-    <!-- 文章列表 -->
+    
     <section id="articles" class="py-16 bg-gray-50 dark:bg-dark-bg/50">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-12 text-center">
@@ -185,12 +185,12 @@
           <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">猴子排序的文章列表</p>
         </div>
         
-        <!-- 文章列表 -->
+        
         <div id="all-articles" class="space-y-6 max-w-4xl mx-auto">
-		  <!-- 动态渲染的列表项会插入这里 -->
+		  
 		</div>
         
-        <!-- 分页 -->
+        
         <div class="mt-12 flex justify-center">
           <nav id="pagination" nav class="inline-flex rounded-lg shadow-md overflow-hidden">
             <a href="#" class="px-4 py-2 bg-white dark:bg-dark-card text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
@@ -207,7 +207,7 @@
       </div>
     </section>
     
-    <!-- 关于作者 -->
+    
     <section id="about" class="py-16">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto">
@@ -232,9 +232,9 @@
                 目前学习Godot的游戏/软件项目
               </p>
               
-              <!-- 社交媒体链接 -->
+              
               <div class="flex space-x-4">
-                <!-- GitHub -->
+                
 				  <a href="https://github.com/By-chi" class="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-all">
 					 <i class="fa fa-github"></i>
 				  </a>
@@ -259,7 +259,7 @@
     </section>
   </main>
 
-  <!-- 页脚 -->
+  
   <footer class="bg-gray-900 text-gray-300 py-12">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
@@ -272,7 +272,7 @@
             刷到低了,看看别的平台吧~
           </p>
 			  <div class="flex space-x-4">
-				  <!-- GitHub -->
+				  
 				  <a href="https://github.com/By-chi" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
 					<i class="fa fa-github"></i>
 				  </a>
@@ -318,14 +318,14 @@
     </div>
   </footer>
 
-  <!-- 返回顶部按钮 -->
+  
   <button id="back-to-top" class="fixed bottom-6 right-6 w-12 h-12 bg-primary text-white rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all hover:bg-primary/90">
     <i class="fa fa-chevron-up"></i>
   </button>
 
-  <!-- JavaScript -->
+  
   <script>
-		// ========== 1. 硬编码文章数据（不变） ==========
+		
 	const articlesData = [
 	  { id: 1, title: "GridPathLock", summary: "一款3D网格关卡解密游戏 (Godot 4.6 dev3)", category: "Godot 3d游戏", categoryColor: "primary", date: "2025.12.7", cover: "https://by-chi.github.io/GridPathLock.png", author: "By.chi", authorAvatar: "https://by-chi.github.io/icon.jpg" },
 	  { id: 2, title: "小球领土战争", summary: "小球领土战争实时模拟", category: "Godot 程序", categoryColor: "secondary", date: "2025.10.5", cover: "https://by-chi.github.io/Particle-Territorial-War.png", author: "By.chi", authorAvatar: "https://by-chi.github.io/icon.jpg" },
@@ -335,29 +335,29 @@
 	  { id: 6, title: "Godot 悬浮窗MC风格性能监视小工具", summary: "无它", category: "Godot 程序", categoryColor: "secondary", date: "2025.2.19", cover: "https://by-chi.github.io/GodotMC.png", author: "By.chi", authorAvatar: "https://by-chi.github.io/icon.jpg" },
 	];
 
-	// ========== 2. 分页全局变量 + 初始调试日志 ==========
-	let currentPage = 1; // 当前页码
-	const pageSize = 4; // 每页显示4篇
-	const totalPages = Math.ceil(articlesData.length / pageSize); // 总页数
+	
+	let currentPage = 1; 
+	const pageSize = 4; 
+	const totalPages = Math.ceil(articlesData.length / pageSize); 
 	console.log('===== 初始分页参数 =====');
 	console.log('文章总数：', articlesData.length);
 	console.log('每页数量：', pageSize);
 	console.log('总页数：', totalPages);
 	console.log('初始页码：', currentPage);
 
-	// ========== 3. 渲染文章函数（加调试日志） ==========
+	
 	function renderArticles() {
 	  console.log('\n===== 开始渲染文章 =====');
 	  console.log('当前页码：', currentPage);
 	  try {
-		// 1. 分页筛选 + 调试
+		
 		const startIndex = (currentPage - 1) * pageSize;
 		const endIndex = startIndex + pageSize;
 		console.log('分页切片范围：', `start=${startIndex}, end=${endIndex}`);
 		const paginatedArticles = articlesData.slice(startIndex, endIndex);
 		console.log('当前页文章数据：', paginatedArticles);
 
-		// 2. 渲染特色文章 + 调试
+		
 		const featuredContainer = document.getElementById('featured-articles');
 		console.log('特色文章容器是否存在：', !!featuredContainer);
 		if (!featuredContainer) throw new Error("特色文章容器未找到");
@@ -388,7 +388,7 @@
 		  </article>
 		`).join('');
 
-		// 3. 渲染分页文章列表 + 调试
+		
 		const allContainer = document.getElementById('all-articles');
 		console.log('全部文章容器是否存在：', !!allContainer);
 		if (!allContainer) throw new Error("全部文章容器未找到");
@@ -417,12 +417,12 @@
 		  </div>
 		`).join('');
 
-		// 4. 更新分页UI + 调试
+		
 		updatePaginationUI(currentPage);
 		console.log('文章渲染完成 ✅');
 	  } catch (err) {
 		console.error("渲染文章失败 ❌：", err);
-		// 兜底提示
+		
 		const featuredContainer = document.getElementById('featured-articles');
 		if (featuredContainer) featuredContainer.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400">文章加载失败</p>';
 		const allContainer = document.getElementById('all-articles');
@@ -430,7 +430,7 @@
 	  }
 	}
 
-	// ========== 4. 更新分页UI（加调试日志） ==========
+	
 	function updatePaginationUI(currentPage) {
 	  console.log('\n===== 更新分页按钮 =====');
 	  console.log('当前页码（更新UI）：', currentPage);
@@ -438,14 +438,14 @@
 	  console.log('分页容器是否存在：', !!paginationContainer);
 	  if (!paginationContainer) return;
 
-	  // 生成分页按钮HTML（修改href为javascript:void(0)）
+	  
 	  let paginationHTML = `
 		<a href="javascript:void(0)" class="px-4 py-2 bg-white dark:bg-dark-card text-gray-500 ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 dark:hover:bg-gray-800'} border-r border-gray-200 dark:border-gray-700" id="prev-page">
 		  <i class="fa fa-chevron-left"></i>
 		</a>
 	  `;
 
-	  // 生成页码按钮（同样修改href）
+	  
 	  for (let i = 1; i <= totalPages; i++) {
 		paginationHTML += `
 		  <a href="javascript:void(0)" class="px-4 py-2 ${i === currentPage ? 'bg-primary text-white' : 'bg-white dark:bg-dark-card text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'} border-r border-gray-200 dark:border-gray-700" data-page="${i}">
@@ -454,7 +454,7 @@
 		`;
 	  }
 
-	  // 下一页按钮（修改href）
+	  
 	  paginationHTML += `
 		<a href="javascript:void(0)" class="px-4 py-2 bg-white dark:bg-dark-card text-gray-500 ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}" id="next-page">
 		  <i class="fa fa-chevron-right"></i>
@@ -465,17 +465,17 @@
 	  console.log('分页按钮更新完成 ✅');
 	}
 
-	// ========== 5. 分页事件委托（加调试日志） ==========
+	
 	function bindPaginationEvents() {
 	  console.log('\n===== 绑定分页事件 =====');
 	  const paginationContainer = document.getElementById('pagination');
 	  console.log('分页容器（绑定事件）是否存在：', !!paginationContainer);
 	  if (!paginationContainer) return;
 
-	  // 事件委托：监听分页容器内所有点击
+	  
 	  paginationContainer.addEventListener('click', (e) => {
 		e.preventDefault(); 
-		e.stopPropagation(); // 新增：阻止事件冒泡
+		e.stopPropagation(); 
 		console.log('\n===== 分页按钮被点击 =====');
 		const target = e.target.closest('a');
 		console.log('点击的目标元素：', target);
@@ -484,11 +484,11 @@
 		  return;
 		}
 
-		// 先保存当前滚动位置（可选，也可直接定位到文章列表）
+		
 		let scrollTop = window.scrollY;
-		let shouldScroll = true; // 是否需要定位到文章列表
+		let shouldScroll = true; 
 
-		// 处理上一页
+		
 		if (target.id === 'prev-page') {
 		  console.log('点击：上一页 | 当前页码：', currentPage);
 		  if (currentPage > 1) {
@@ -497,11 +497,11 @@
 			renderArticles();
 		  } else {
 			console.log('已经是第一页，无法上一页 ❌');
-			shouldScroll = false; // 无需滚动
+			shouldScroll = false; 
 		  }
 		}
 
-		// 处理下一页
+		
 		else if (target.id === 'next-page') {
 		  console.log('点击：下一页 | 当前页码：', currentPage);
 		  if (currentPage < totalPages) {
@@ -510,11 +510,11 @@
 			renderArticles();
 		  } else {
 			console.log('已经是最后一页，无法下一页 ❌');
-			shouldScroll = false; // 无需滚动
+			shouldScroll = false; 
 		  }
 		}
 
-		// 处理页码按钮
+		
 		else if (target.dataset.page) {
 		  const page = parseInt(target.dataset.page);
 		  console.log('点击：页码按钮 | 目标页码：', page, '| 当前页码：', currentPage);
@@ -524,41 +524,41 @@
 			renderArticles();
 		  } else if (page === currentPage) {
 			console.log('已在当前页码，无需切换 ❌');
-			shouldScroll = false; // 无需滚动
+			shouldScroll = false; 
 		  } else {
 			console.log('无效页码 ❌：', page);
 			shouldScroll = false;
 		  }
 		}
 
-		// 渲染完成后，滚动到文章列表顶部（核心：解决视角乱跳）
+		
 		if (shouldScroll) {
 		  setTimeout(() => {
 			const articlesSection = document.getElementById('articles');
 			if (articlesSection) {
-			  // 平滑滚动到文章列表顶部（偏移20px，避免贴顶）
+			  
 			  articlesSection.scrollIntoView({ 
 				behavior: 'smooth', 
 				block: 'start',
 				inline: 'nearest'
 			  });
 			}
-		  }, 100); // 延迟100ms，确保DOM渲染完成
+		  }, 100); 
 		}
 	  });
 	}
 
-	// ========== 6. 所有初始化逻辑（加调试日志） ==========
+	
 	window.addEventListener('DOMContentLoaded', () => {
 	  console.log('\n===== 页面加载完成，初始化 =====');
 	  
-	  // 1. 绑定分页事件（仅绑定一次）
+	  
 	  bindPaginationEvents();
 	  
-	  // 2. 渲染文章
+	  
 	  renderArticles();
 
-	  // --- 其他逻辑（深色模式、菜单等，不变） ---
+	  
 	  const themeToggle = document.getElementById('theme-toggle');
 	  const html = document.documentElement;
 	  if (localStorage.getItem('theme') !== 'light') {
