@@ -213,179 +213,334 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('countdown-timer').innerHTML = `已过${-days}天 ${-hours}小时 ${-minutes}分钟`;
         }
     }
-    // 图片点击放大功能
-    function initImageZoom() {
-        // 检查是否已经存在模态框
-        if (document.querySelector('.image-modal')) {
-            console.log('图片放大功能已初始化');
+    // 图片查看器功能（类似评论区样式）
+    function initImageViewer() {
+        // 检查是否已存在查看器
+        if (document.getElementById('imageViewerOverlay')) {
             return;
         }
         
-        // 创建模态框容器
-        const modal = document.createElement('div');
-        modal.className = 'image-modal';
+        // 创建查看器结构
+        const overlay = document.createElement('div');
+        overlay.id = 'imageViewerOverlay';
+        overlay.className = 'image-viewer-overlay';
         
-        // 创建图片容器
+        const container = document.createElement('div');
+        container.className = 'image-viewer-container';
+        
         const imgContainer = document.createElement('div');
-        imgContainer.className = 'modal-image-container';
+        imgContainer.className = 'image-viewer-img-container';
         
-        // 创建图片元素
-        const modalImg = document.createElement('img');
-        modalImg.className = 'modal-image';
+        const img = document.createElement('img');
+        img.className = 'image-viewer-img';
         
-        // 创建关闭按钮
-        const closeBtn = document.createElement('button');
-        closeBtn.innerHTML = '&times;';
-        closeBtn.className = 'modal-close';
-        closeBtn.setAttribute('aria-label', '关闭');
+        // 创建工具栏
+        const toolbar = document.createElement('div');
+        toolbar.className = 'image-viewer-toolbar';
         
-        // 创建导航按钮
-        const prevBtn = document.createElement('button');
-        prevBtn.innerHTML = '‹';
-        prevBtn.className = 'modal-nav modal-prev';
-        prevBtn.setAttribute('aria-label', '上一张');
+        const zoomInBtn = createButton('+', 'zoom-in', '放大');
+        const zoomOutBtn = createButton('-', 'zoom-out', '缩小');
+        const closeBtn = createButton('×', 'close', '关闭');
         
-        const nextBtn = document.createElement('button');
-        nextBtn.innerHTML = '›';
-        nextBtn.className = 'modal-nav modal-next';
-        nextBtn.setAttribute('aria-label', '下一张');
+        // 创建信息显示
+        const zoomLevel = document.createElement('div');
+        zoomLevel.className = 'image-viewer-zoom-level';
+        zoomLevel.textContent = '100%';
         
-        // 创建图片描述
-        const caption = document.createElement('div');
-        caption.className = 'modal-caption';
+        const info = document.createElement('div');
+        info.className = 'image-viewer-info';
         
-        // 组装模态框
-        imgContainer.appendChild(modalImg);
-        imgContainer.appendChild(closeBtn);
-        imgContainer.appendChild(prevBtn);
-        imgContainer.appendChild(nextBtn);
-        imgContainer.appendChild(caption);
-        modal.appendChild(imgContainer);
-        document.body.appendChild(modal);
+        const counter = document.createElement('div');
+        counter.className = 'image-viewer-counter';
         
-        // 图片数组和当前索引
+        const filename = document.createElement('div');
+        filename.className = 'image-viewer-filename';
+        
+        info.appendChild(counter);
+        info.appendChild(filename);
+        
+        // 创建加载提示
+        const loading = document.createElement('div');
+        loading.className = 'image-loading';
+        loading.textContent = '加载中...';
+        loading.style.display = 'none';
+        
+        // 组装结构
+        toolbar.appendChild(zoomInBtn);
+        toolbar.appendChild(zoomOutBtn);
+        toolbar.appendChild(closeBtn);
+        
+        imgContainer.appendChild(img);
+        imgContainer.appendChild(loading);
+        
+        container.appendChild(zoomLevel);
+        container.appendChild(toolbar);
+        container.appendChild(imgContainer);
+        container.appendChild(info);
+        
+        overlay.appendChild(container);
+        document.body.appendChild(overlay);
+        
+        // 状态变量
         let currentImages = [];
         let currentIndex = 0;
+        let scale = 1;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let translateX = 0;
+        let translateY = 0;
         
-        // 打开模态框
-        function openModal(images, index = 0) {
-            currentImages = images;
-            currentIndex = index;
-            updateModal();
-            
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.classList.add('show');
-            }, 10);
-            
-            // 显示/隐藏导航按钮
-            prevBtn.style.display = images.length > 1 ? 'flex' : 'none';
-            nextBtn.style.display = images.length > 1 ? 'flex' : 'none';
-            
-            // 阻止背景滚动
-            document.body.style.overflow = 'hidden';
+        // 创建按钮的辅助函数
+        function createButton(text, className, title) {
+            const btn = document.createElement('button');
+            btn.className = `image-viewer-btn ${className}`;
+            btn.innerHTML = text;
+            btn.title = title;
+            return btn;
         }
         
-        // 关闭模态框
-        function closeModal() {
-            modal.classList.remove('show');
+        // 打开查看器
+        function openViewer(images, index = 0) {
+            currentImages = images;
+            currentIndex = index;
+            
+            // 重置状态
+            resetTransform();
+            
+            // 显示查看器
+            overlay.style.display = 'block';
             setTimeout(() => {
-                modal.style.display = 'none';
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }, 10);
+            
+            // 加载图片
+            loadImage(currentIndex);
+        }
+        
+        // 关闭查看器
+        function closeViewer() {
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                overlay.style.display = 'none';
                 document.body.style.overflow = '';
             }, 300);
         }
         
-        // 更新模态框内容
-        function updateModal() {
+        // 加载图片
+        function loadImage(index) {
+            if (index < 0 || index >= currentImages.length) return;
+            
+            const imgData = currentImages[index];
+            currentIndex = index;
+            
+            // 显示加载提示
+            loading.style.display = 'block';
+            img.style.opacity = '0';
+            
+            // 创建新Image对象预加载
+            const tempImg = new Image();
+            tempImg.onload = function() {
+                img.src = this.src;
+                img.alt = imgData.alt || '';
+                img.style.opacity = '1';
+                loading.style.display = 'none';
+                
+                // 更新信息
+                updateInfo();
+            };
+            
+            tempImg.onerror = function() {
+                loading.textContent = '图片加载失败';
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                }, 2000);
+            };
+            
+            tempImg.src = imgData.src;
+        }
+        
+        // 更新显示信息
+        function updateInfo() {
+            counter.textContent = `${currentIndex + 1} / ${currentImages.length}`;
+            
             const imgData = currentImages[currentIndex];
-            modalImg.src = imgData.src;
-            modalImg.alt = imgData.alt || '';
-            caption.textContent = imgData.caption || '';
+            const name = imgData.alt || imgData.caption || '图片';
+            filename.textContent = name;
             
-            // 预加载相邻图片
-            preloadAdjacentImages();
+            zoomLevel.textContent = `${Math.round(scale * 100)}%`;
         }
         
-        // 预加载相邻图片
-        function preloadAdjacentImages() {
-            const indicesToPreload = [
-                (currentIndex - 1 + currentImages.length) % currentImages.length,
-                (currentIndex + 1) % currentImages.length
-            ];
+        // 重置变换
+        function resetTransform() {
+            scale = 1;
+            translateX = 0;
+            translateY = 0;
+            applyTransform();
+        }
+        
+        // 应用变换
+        function applyTransform() {
+            img.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+            updateInfo();
+        }
+        
+        // 缩放图片
+        function zoomIn() {
+            if (scale < 5) {
+                scale += 0.25;
+                applyTransform();
+            }
+        }
+        
+        function zoomOut() {
+            if (scale > 0.25) {
+                scale -= 0.25;
+                applyTransform();
+            }
+        }
+        
+        // 鼠标滚轮缩放
+        function handleWheel(e) {
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                zoomIn();
+            } else {
+                zoomOut();
+            }
+        }
+        
+        // 鼠标拖动
+        function startDrag(e) {
+            e.preventDefault();
+            isDragging = true;
+            img.classList.add('dragging');
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+        }
+        
+        function doDrag(e) {
+            if (!isDragging) return;
+            translateX = e.clientX - startX;
+            translateY = e.clientY - startY;
+            applyTransform();
+        }
+        
+        function endDrag() {
+            isDragging = false;
+            img.classList.remove('dragging');
+        }
+        
+        // 键盘控制
+        function handleKeyDown(e) {
+            if (!overlay.classList.contains('active')) return;
             
-            indicesToPreload.forEach(index => {
-                const img = new Image();
-                img.src = currentImages[index].src;
+            switch(e.key) {
+                case 'Escape':
+                    closeViewer();
+                    break;
+                case 'ArrowLeft':
+                    if (currentIndex > 0) {
+                        loadImage(currentIndex - 1);
+                    }
+                    break;
+                case 'ArrowRight':
+                    if (currentIndex < currentImages.length - 1) {
+                        loadImage(currentIndex + 1);
+                    }
+                    break;
+                case '+':
+                case '=':
+                    if (e.shiftKey || e.key === '+') {
+                        zoomIn();
+                    }
+                    break;
+                case '-':
+                    zoomOut();
+                    break;
+                case '0':
+                    resetTransform();
+                    break;
+            }
+        }
+        
+        // 双击重置
+        function handleDoubleClick() {
+            resetTransform();
+        }
+        
+        // 绑定事件
+        closeBtn.addEventListener('click', closeViewer);
+        zoomInBtn.addEventListener('click', zoomIn);
+        zoomOutBtn.addEventListener('click', zoomOut);
+        img.addEventListener('wheel', handleWheel);
+        img.addEventListener('mousedown', startDrag);
+        img.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            startDrag({
+                preventDefault: () => {},
+                clientX: touch.clientX,
+                clientY: touch.clientY
             });
-        }
+        });
+        img.addEventListener('dblclick', handleDoubleClick);
         
-        // 导航到上一张
-        function prevImage() {
-            currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
-            updateModal();
-        }
+        window.addEventListener('mousemove', doDrag);
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            doDrag({
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+        });
         
-        // 导航到下一张
-        function nextImage() {
-            currentIndex = (currentIndex + 1) % currentImages.length;
-            updateModal();
-        }
+        window.addEventListener('mouseup', endDrag);
+        window.addEventListener('touchend', endDrag);
+        document.addEventListener('keydown', handleKeyDown);
         
-        // 事件监听器
-        closeBtn.addEventListener('click', closeModal);
-        prevBtn.addEventListener('click', prevImage);
-        nextBtn.addEventListener('click', nextImage);
-        
-        // 点击模态框背景关闭
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
+        // 点击背景关闭
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                closeViewer();
             }
         });
         
-        // 键盘导航
-        document.addEventListener('keydown', (e) => {
-            if (modal.style.display === 'flex') {
-                switch(e.key) {
-                    case 'Escape':
-                        closeModal();
-                        break;
-                    case 'ArrowLeft':
-                        prevImage();
-                        break;
-                    case 'ArrowRight':
-                        nextImage();
-                        break;
-                }
-            }
-        });
-        
-        // 为所有可放大的图片添加点击事件
-        function attachImageZoomEvents() {
-            document.querySelectorAll('.zoomable-image').forEach((img, index, arr) => {
-                // 移除可能存在的旧事件监听器
+        // 为所有可点击图片添加事件
+        function attachImageEvents() {
+            document.querySelectorAll('.clickable-image').forEach((img, index, arr) => {
+                // 移除旧事件监听器
                 img.removeEventListener('click', handleImageClick);
                 
-                // 添加新的事件监听器
-                img.addEventListener('click', handleImageClick);
-                
-                function handleImageClick() {
-                    // 收集所有可放大的图片数据
+                // 添加新事件监听器
+                img.addEventListener('click', function() {
                     const images = Array.from(arr).map(image => ({
                         src: image.src,
                         alt: image.alt,
                         caption: image.getAttribute('data-caption') || image.getAttribute('alt') || ''
                     }));
                     
-                    // 获取当前点击图片的索引
                     const clickedIndex = Array.from(arr).indexOf(this);
-                    openModal(images, clickedIndex);
-                }
+                    openViewer(images, clickedIndex);
+                });
             });
         }
         
-        // 初始化时添加事件
-        attachImageZoomEvents();
+        // 初始化事件绑定
+        attachImageEvents();
+        
+        // 监听动态添加的图片
+        const observer = new MutationObserver(() => {
+            attachImageEvents();
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     }
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -402,9 +557,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    
     animateCounters();
+    initImageViewer();
+    
     initChart({
         canvasId: 'gradeChart',
         labels: ['3', '4', '5','5.5', '6', '6.5', '9', '10', '11', '12','1'],

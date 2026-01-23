@@ -1,4 +1,4 @@
-/* 基础样式 */
+
 :root {
     --primary-color: #4a6fa5;
     --secondary-color: #166088;
@@ -22,7 +22,7 @@ body {
     min-height: 100vh;
 }
 
-/* 导航栏 */
+
 .navbar {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -46,11 +46,11 @@ body {
     color: var(--primary-color);
 }
 
-/* 英雄区域 */
+
 .hero-section {
     padding: 120px 0 80px;
     background: linear-gradient(rgba(74, 111, 165, 0.9), rgba(22, 96, 136, 0.9)),
-                url('assets/images/hero-bg.jpg') center/cover;
+                url('https://by-chi.github.io/AnnualSummary2025/assets/images/hero-bg.jpg') center/cover;
     color: white;
     text-align: center;
 }
@@ -66,7 +66,7 @@ body {
     opacity: 0.9;
 }
 
-/* 模块区域 */
+
 .module-section {
     margin: 60px 0;
     padding: 40px 20px;
@@ -87,7 +87,7 @@ body {
     margin-right: 10px;
 }
 
-/* 统计卡片 */
+
 .stats-card {
     background: var(--light-bg);
     padding: 30px;
@@ -122,7 +122,7 @@ body {
     color: var(--primary-color);
 }
 
-/* 卡片样式 */
+
 .card {
     border: none;
     border-radius: 15px;
@@ -141,13 +141,13 @@ body {
     padding: 25px;
 }
 
-/* 地图容器 */
+
 #map {
     border-radius: 10px;
     overflow: hidden;
 }
 
-/* 倒计时 */
+
 .countdown {
     margin-top: 30px;
     padding: 20px;
@@ -162,7 +162,7 @@ body {
     margin-top: 10px;
 }
 
-/* 页脚 */
+
 footer {
     background: var(--secondary-color);
     color: white;
@@ -182,7 +182,7 @@ footer {
     opacity: 0.8;
 }
 
-/* 响应式设计 */
+
 @media (max-width: 768px) {
     .hero-section h1 {
         font-size: 2.5rem;
@@ -218,130 +218,186 @@ footer {
         margin: 40px 0;
     }
 }
-/* 图片放大模态框样式 */
-.image-modal {
-    display: none;
+/* 图片查看器样式 */
+.image-viewer-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index: 10000;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: none;
     opacity: 0;
     transition: opacity 0.3s ease;
-    align-items: center;
-    justify-content: center;
 }
 
-.image-modal.show {
+.image-viewer-overlay.active {
     opacity: 1;
 }
 
-.modal-image-container {
-    max-width: 90%;
-    max-height: 90%;
-    position: relative;
-}
-
-.modal-image {
+.image-viewer-container {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-.modal-close {
+.image-viewer-img-container {
+    max-width: 90%;
+    max-height: 85%;
+    position: relative;
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+}
+
+.image-viewer-img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.2s ease;
+}
+
+.image-viewer-img.dragging {
+    cursor: grabbing;
+}
+
+.image-viewer-toolbar {
     position: absolute;
-    top: -40px;
-    right: 0;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.image-viewer-btn {
     background: none;
     border: none;
     color: white;
-    font-size: 40px;
-    cursor: pointer;
-    padding: 0;
     width: 40px;
     height: 40px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.3s ease;
-}
-
-.modal-close:hover {
-    color: #4a6fa5;
-}
-
-.modal-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    color: white;
-    font-size: 30px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
     cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s ease;
+    font-size: 20px;
+    transition: background-color 0.2s;
 }
 
-.modal-nav:hover {
-    background: rgba(255, 255, 255, 0.2);
+.image-viewer-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
-.modal-prev {
-    left: -60px;
+.image-viewer-btn.close {
+    background-color: #ff4757;
 }
 
-.modal-next {
-    right: -60px;
+.image-viewer-btn.close:hover {
+    background-color: #ff3742;
 }
 
-.modal-caption {
+.image-viewer-btn.zoom-in {
+    background-color: #2ed573;
+}
+
+.image-viewer-btn.zoom-out {
+    background-color: #1e90ff;
+}
+
+.image-viewer-info {
     position: absolute;
-    bottom: -40px;
+    bottom: 20px;
     left: 0;
     width: 100%;
     text-align: center;
     color: white;
-    font-size: 16px;
     padding: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
 }
 
-/* 可点击放大的图片样式 */
-.zoomable-image {
-    cursor: zoom-in;
-    transition: transform 0.3s ease;
+.image-viewer-counter {
+    font-size: 14px;
+    margin-bottom: 5px;
 }
 
-.zoomable-image:hover {
-    transform: scale(1.02);
+.image-viewer-filename {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.image-viewer-zoom-level {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    backdrop-filter: blur(10px);
+}
+
+/* 可点击的图片 */
+.clickable-image {
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 100%;
+    height: auto;
+}
+
+.clickable-image:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 加载动画 */
+.image-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 14px;
 }
 
 /* 响应式调整 */
 @media (max-width: 768px) {
-    .modal-prev {
-        left: 10px;
-    }
-    
-    .modal-next {
-        right: 10px;
-    }
-    
-    .modal-close {
+    .image-viewer-toolbar {
         top: 10px;
         right: 10px;
+        padding: 8px;
     }
     
-    .modal-nav {
-        width: 40px;
-        height: 40px;
-        font-size: 24px;
+    .image-viewer-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+    
+    .image-viewer-img-container {
+        max-width: 95%;
+        max-height: 75%;
+    }
+    
+    .image-viewer-info {
+        bottom: 10px;
+        padding: 8px;
     }
 }
