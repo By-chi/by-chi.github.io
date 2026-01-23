@@ -509,32 +509,58 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
+        // 图片点击处理函数
+        function handleImageClick() {
+            // 收集所有可点击的图片数据
+            const images = Array.from(document.querySelectorAll('.clickable-image')).map(image => ({
+                src: image.src,
+                alt: image.alt || '',
+                caption: image.getAttribute('data-caption') || image.getAttribute('alt') || ''
+            }));
+            
+            // 获取当前点击图片的索引
+            const clickedIndex = Array.from(document.querySelectorAll('.clickable-image')).indexOf(this);
+            openViewer(images, clickedIndex);
+        }
+        
         // 为所有可点击图片添加事件
         function attachImageEvents() {
             document.querySelectorAll('.clickable-image').forEach((img, index, arr) => {
-                // 移除旧事件监听器
-                img.removeEventListener('click', handleImageClick);
+                // 移除可能存在的旧事件监听器
+                const newImg = img.cloneNode(true);
+                img.parentNode.replaceChild(newImg, img);
                 
-                // 添加新事件监听器
-                img.addEventListener('click', function() {
-                    const images = Array.from(arr).map(image => ({
-                        src: image.src,
-                        alt: image.alt,
-                        caption: image.getAttribute('data-caption') || image.getAttribute('alt') || ''
-                    }));
-                    
-                    const clickedIndex = Array.from(arr).indexOf(this);
-                    openViewer(images, clickedIndex);
-                });
+                // 重新添加事件监听器
+                newImg.addEventListener('click', handleImageClick);
             });
         }
         
-        // 初始化事件绑定
+        // 初始化时添加事件
         attachImageEvents();
         
-        // 监听动态添加的图片
-        const observer = new MutationObserver(() => {
-            attachImageEvents();
+        // 监听动态添加的图片（如果需要）
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.addedNodes.length) {
+                    // 检查新增节点中是否有 .clickable-image
+                    const newImages = [];
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === 1) { // 元素节点
+                            if (node.classList && node.classList.contains('clickable-image')) {
+                                newImages.push(node);
+                            }
+                            // 检查子元素
+                            const childImages = node.querySelectorAll('.clickable-image');
+                            childImages.forEach(img => newImages.push(img));
+                        }
+                    });
+                    
+                    // 为新图片添加事件
+                    newImages.forEach(img => {
+                        img.addEventListener('click', handleImageClick);
+                    });
+                }
+            });
         });
         
         observer.observe(document.body, {
@@ -542,21 +568,6 @@ document.addEventListener('DOMContentLoaded', function() {
             subtree: true
         });
     }
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
     animateCounters();
     initImageViewer();
     

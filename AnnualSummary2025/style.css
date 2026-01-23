@@ -218,18 +218,19 @@ footer {
         margin: 40px 0;
     }
 }
-/* 图片查看器样式 */
+/* 图片查看器样式 - 与整体风格统一 */
 .image-viewer-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
+    background-color: rgba(0, 0, 0, 0.92);
     z-index: 9999;
     display: none;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(5px);
 }
 
 .image-viewer-overlay.active {
@@ -246,7 +247,7 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 30px 20px;
     box-sizing: border-box;
 }
 
@@ -254,10 +255,11 @@ footer {
     max-width: 90%;
     max-height: 85%;
     position: relative;
-    background: #fff;
-    border-radius: 4px;
+    background: white;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
 }
 
 .image-viewer-img {
@@ -275,96 +277,119 @@ footer {
 
 .image-viewer-toolbar {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 25px;
+    right: 25px;
     display: flex;
-    gap: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    padding: 10px;
-    border-radius: 8px;
-    backdrop-filter: blur(10px);
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 15px;
+    border-radius: 15px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .image-viewer-btn {
-    background: none;
+    background: rgba(255, 255, 255, 0.2);
     border: none;
     color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 20px;
-    transition: background-color 0.2s;
+    font-size: 22px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
 }
 
 .image-viewer-btn:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
 }
 
 .image-viewer-btn.close {
-    background-color: #ff4757;
+    background: rgba(255, 71, 87, 0.8);
+    color: white;
 }
 
 .image-viewer-btn.close:hover {
-    background-color: #ff3742;
+    background: rgba(255, 71, 87, 1);
+    transform: translateY(-2px);
 }
 
 .image-viewer-btn.zoom-in {
-    background-color: #2ed573;
+    background: rgba(42, 157, 143, 0.8);
+    color: white;
 }
 
 .image-viewer-btn.zoom-out {
-    background-color: #1e90ff;
+    background: rgba(74, 111, 165, 0.8);
+    color: white;
 }
 
 .image-viewer-info {
     position: absolute;
-    bottom: 20px;
-    left: 0;
-    width: 100%;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
     text-align: center;
     color: white;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
+    padding: 15px 30px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    min-width: 200px;
 }
 
 .image-viewer-counter {
-    font-size: 14px;
-    margin-bottom: 5px;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
 }
 
 .image-viewer-filename {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
 }
 
 .image-viewer-zoom-level {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    background: rgba(0, 0, 0, 0.7);
+    top: 25px;
+    left: 25px;
+    background: rgba(255, 255, 255, 0.15);
     color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 14px;
-    backdrop-filter: blur(10px);
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 /* 可点击的图片 */
 .clickable-image {
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     max-width: 100%;
     height: auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
 .clickable-image:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 /* 加载动画 */
@@ -374,30 +399,161 @@ footer {
     left: 50%;
     transform: translate(-50%, -50%);
     color: white;
-    font-size: 14px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px 25px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+/* 导航按钮 */
+.modal-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.modal-nav:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.modal-prev {
+    left: 30px;
+}
+
+.modal-next {
+    right: 30px;
 }
 
 /* 响应式调整 */
 @media (max-width: 768px) {
     .image-viewer-toolbar {
-        top: 10px;
-        right: 10px;
-        padding: 8px;
+        top: 15px;
+        right: 15px;
+        padding: 12px;
+        gap: 8px;
     }
     
     .image-viewer-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
     }
     
     .image-viewer-img-container {
         max-width: 95%;
         max-height: 75%;
+        border-radius: 15px;
+    }
+    
+    .image-viewer-info {
+        bottom: 15px;
+        padding: 12px 20px;
+        min-width: 180px;
+    }
+    
+    .image-viewer-zoom-level {
+        top: 15px;
+        left: 15px;
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    .modal-nav {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+    
+    .modal-prev {
+        left: 15px;
+    }
+    
+    .modal-next {
+        right: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .image-viewer-container {
+        padding: 20px 15px;
+    }
+    
+    .image-viewer-toolbar {
+        top: 10px;
+        right: 10px;
+        padding: 10px;
+        flex-direction: row;
+    }
+    
+    .image-viewer-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
     }
     
     .image-viewer-info {
         bottom: 10px;
-        padding: 8px;
+        padding: 10px 15px;
+        width: 90%;
     }
+    
+    .image-viewer-img-container {
+        max-width: 98%;
+        max-height: 70%;
+    }
+}
+
+/* 图片查看器动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.image-viewer-img-container {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 工具提示样式 */
+.image-viewer-btn[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10000;
+}
+
+.image-viewer-btn[title]::after {
+    display: none;
+}
+
+.image-viewer-btn[title]:hover::after {
+    display: block;
 }
