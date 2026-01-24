@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
         once: true,
         offset: 100
     });
-    document.addEventListener('DOMContentLoaded', animateCounters);
+    animateCounters();
     function animateCounters() {
     const counterElements = document.querySelectorAll('.stat-value');
     console.log(`[计数器] 找到 ${counterElements.length} 个元素`);
@@ -102,8 +102,243 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(element);
     });
     }
-
-
+    function initTable(config) {
+        const defaultConfig = {
+            containerId: 'tableContainer',
+            tableId: 'dataTable',
+            columns: [
+                { title: '序号', field: 'index', type: 'number' },
+                { title: '姓名', field: 'name', type: 'string' },
+                { title: '年龄', field: 'age', type: 'number' },
+                { title: '成绩', field: 'score', type: 'number' }
+            ],
+            data: [
+                { index: 1, name: '张三', age: 20, score: 85 },
+                { index: 2, name: '李四', age: 22, score: 92 },
+                { index: 3, name: '王五', age: 21, score: 78 }
+            ],
+            sortable: true,
+            striped: true,
+            bordered: true,
+            hoverable: true,
+            showHeader: true,
+            showFooter: false,
+            footerContent: null,
+            className: 'basic-table',
+            responsive: true,
+            collapseButton: false, // 新增配置：是否显示折叠按钮
+            defaultCollapsed: false // 新增配置：默认是否折叠显示
+        };
+        
+        const finalConfig = { ...defaultConfig, ...config };
+        
+        // 获取容器
+        const container = document.getElementById(finalConfig.containerId);
+        if (!container) {
+            console.error(`容器 ${finalConfig.containerId} 不存在`);
+            return;
+        }
+        
+        // 清空容器
+        container.innerHTML = '';
+        
+        // 创建折叠按钮（如果启用）
+        let collapseBtn = null;
+        let isCollapsed = finalConfig.defaultCollapsed; // 使用配置的默认折叠状态
+        const tableWrapper = document.createElement('div');
+        tableWrapper.className = 'table-wrapper';
+        
+        if (finalConfig.collapseButton) {
+            collapseBtn = document.createElement('button');
+            collapseBtn.className = 'collapse-btn';
+            collapseBtn.type = 'button';
+            
+            // 根据默认折叠状态设置初始文本和样式
+            if (finalConfig.defaultCollapsed) {
+                collapseBtn.textContent = '详情';
+                collapseBtn.classList.add('collapsed');
+            } else {
+                collapseBtn.textContent = '折叠';
+            }
+            
+            collapseBtn.addEventListener('click', function() {
+                isCollapsed = !isCollapsed;
+                if (isCollapsed) {
+                    table.style.display = 'none';
+                    this.textContent = '详情';
+                    this.classList.add('collapsed');
+                } else {
+                    table.style.display = '';
+                    this.textContent = '折叠';
+                    this.classList.remove('collapsed');
+                }
+            });
+            
+            container.appendChild(collapseBtn);
+        }
+        
+        // 创建表格
+        const table = document.createElement('table');
+        table.id = finalConfig.tableId;
+        table.className = finalConfig.className;
+        
+        // 根据默认折叠状态设置表格显示
+        if (finalConfig.defaultCollapsed && finalConfig.collapseButton) {
+            table.style.display = 'none';
+        }
+        
+        // 添加表格类名
+        if (finalConfig.striped) table.classList.add('striped');
+        if (finalConfig.bordered) table.classList.add('bordered');
+        if (finalConfig.hoverable) table.classList.add('hoverable');
+        if (finalConfig.responsive) container.classList.add('responsive-container');
+        
+        // 创建表头
+        if (finalConfig.showHeader) {
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            
+            finalConfig.columns.forEach(column => {
+                const th = document.createElement('th');
+                th.textContent = column.title;
+                th.setAttribute('data-field', column.field);
+                th.setAttribute('data-type', column.type || 'string');
+                
+                // 添加排序功能
+                if (finalConfig.sortable && column.type === 'number') {
+                    th.classList.add('sortable');
+                    th.setAttribute('data-sort', 'none');
+                    
+                    th.addEventListener('click', () => {
+                        handleSort(table, column.field, column.type);
+                    });
+                }
+                
+                headerRow.appendChild(th);
+            });
+            
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+        }
+        
+        // 创建表体
+        const tbody = document.createElement('tbody');
+        
+        finalConfig.data.forEach((rowData, rowIndex) => {
+            const row = document.createElement('tr');
+            row.setAttribute('data-index', rowIndex);
+            
+            finalConfig.columns.forEach(column => {
+                const td = document.createElement('td');
+                const value = rowData[column.field] !== undefined ? rowData[column.field] : '';
+                
+                // 根据列类型格式化显示
+                if (column.type === 'number' && !isNaN(value)) {
+                    td.textContent = Number(value).toLocaleString();
+                    td.classList.add('number-cell');
+                } else {
+                    td.textContent = value;
+                }
+                
+                td.setAttribute('data-field', column.field);
+                row.appendChild(td);
+            });
+            
+            tbody.appendChild(row);
+        });
+        
+        table.appendChild(tbody);
+        
+        // 创建表尾
+        if (finalConfig.showFooter && finalConfig.footerContent) {
+            const tfoot = document.createElement('tfoot');
+            const footerRow = document.createElement('tr');
+            
+            if (typeof finalConfig.footerContent === 'function') {
+                // 如果是函数，执行并获取HTML
+                footerRow.innerHTML = finalConfig.footerContent(finalConfig.data);
+            } else if (Array.isArray(finalConfig.footerContent)) {
+                // 如果是数组，创建单元格
+                finalConfig.footerContent.forEach((content, index) => {
+                    const td = document.createElement('td');
+                    td.textContent = content;
+                    if (index === 0) td.setAttribute('colspan', finalConfig.columns.length);
+                    footerRow.appendChild(td);
+                });
+            } else {
+                // 如果是字符串或数字
+                const td = document.createElement('td');
+                td.textContent = finalConfig.footerContent;
+                td.setAttribute('colspan', finalConfig.columns.length);
+                footerRow.appendChild(td);
+            }
+            
+            tfoot.appendChild(footerRow);
+            table.appendChild(tfoot);
+        }
+        
+        // 将表格添加到包装器，然后添加到容器
+        tableWrapper.appendChild(table);
+        container.appendChild(tableWrapper);
+        
+        return table;
+    }
+    function handleSort(table, field, type) {
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        const th = table.querySelector(`th[data-field="${field}"]`);
+        const currentSort = th.getAttribute('data-sort');
+        
+        // 切换排序状态
+        let sortDirection = 'asc';
+        if (currentSort === 'asc') {
+            sortDirection = 'desc';
+        } else if (currentSort === 'desc') {
+            sortDirection = 'none';
+        }
+        
+        // 更新所有表头的排序状态
+        table.querySelectorAll('th.sortable').forEach(header => {
+            header.setAttribute('data-sort', 'none');
+            header.classList.remove('sort-asc', 'sort-desc');
+        });
+        
+        if (sortDirection !== 'none') {
+            // 排序行
+            rows.sort((a, b) => {
+                const cellA = a.querySelector(`td[data-field="${field}"]`);
+                const cellB = b.querySelector(`td[data-field="${field}"]`);
+                
+                let valueA = cellA ? cellA.textContent : '';
+                let valueB = cellB ? cellB.textContent : '';
+                
+                // 根据类型转换值
+                if (type === 'number') {
+                    valueA = parseFloat(valueA.replace(/,/g, '')) || 0;
+                    valueB = parseFloat(valueB.replace(/,/g, '')) || 0;
+                }
+                
+                if (sortDirection === 'asc') {
+                    return valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+                } else {
+                    return valueA < valueB ? 1 : valueA > valueB ? -1 : 0;
+                }
+            });
+            
+            // 重新添加排序后的行
+            rows.forEach(row => tbody.appendChild(row));
+            
+            // 更新表头状态
+            th.setAttribute('data-sort', sortDirection);
+            th.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+        } else {
+            // 恢复原始顺序
+            rows.sort((a, b) => {
+                return parseInt(a.getAttribute('data-index')) - parseInt(b.getAttribute('data-index'));
+            });
+            rows.forEach(row => tbody.appendChild(row));
+        }
+    }
 
    function initChart(config) {
         
@@ -570,7 +805,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     animateCounters();
     initImageViewer();
-    
+    initTable({
+        containerId: 'games-table',
+        columns: [
+            { title: '名称', field: 'name', type: 'string' },
+            { title: '频率', field: 'frequency', type: 'string' },
+            { title: '时长/h', field: 'time', type: 'number' },
+        ],
+        data: [
+            {name: 'CODM手游', frequency: '频繁', time: 200,},
+            {name: 'WorldBox', frequency: '经常', time: 40,},
+            {name: 'CS2', frequency: '有时', time: 18.7,},
+            {name: '冰与火之舞', frequency: '有时', time: 10,},
+            {name: 'Minecraft', frequency: '有时', time: 22,},
+            {name: 'Ravenfield', frequency: '有时', time: 5,},
+            {name: '三角洲行动', frequency: '有时', time: 20,},
+            {name: 'Forager', frequency: '有时', time: 10,},
+            {name: 'FrostRunner', frequency: '已停', time: 4,},
+            {name: 'World of Warplanes', frequency: '已停', time: 5,},
+        ],
+        sortable: true,
+        striped: true,
+        hoverable: true,
+        collapseButton: true,
+        defaultCollapsed: true,
+    });
     initChart({
         canvasId: 'gradeChart',
         labels: ['3', '4', '5','5.5', '6', '6.5', '9', '10', '11', '12','1'],
