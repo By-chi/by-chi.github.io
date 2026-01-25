@@ -279,10 +279,19 @@
         setTimeout(clearFilter, 300)
 
         
-		const targetUrl = 'home.html';
-		document.addEventListener('click', () => {
-			window.location.href = targetUrl;
-		});
+        const targetUrl = 'home.html';
+        let autoRedirectTimer = setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 4500);
+        
+        document.addEventListener('click', () => {
+            clearTimeout(autoRedirectTimer);
+            window.location.href = targetUrl;
+        });
+        document.addEventListener('touchstart', () => {
+            clearTimeout(autoRedirectTimer);
+            window.location.href = targetUrl;
+        });
     </script>
 </body>
 </html>
