@@ -1,0 +1,36 @@
+name: 部署 Hugo 到 GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+          fetch-depth: 0
+
+      - name: 手动下载 PaperMod 主题
+        run: |
+          mkdir -p themes
+          cd themes
+          git clone --depth 1 https://github.com/adityatelange/hugo-PaperMod.git PaperMod
+
+      - name: 安装 Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: 构建
+        run: hugo --minify
+
+      - name: 部署
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public

@@ -1,0 +1,49 @@
+baseURL = 'https://by-chi.github.io/'
+locale = 'zh-cn'
+title = 'By.Chi'
+theme = 'PaperMod'
+
+paginate = 8
+
+[markup.goldmark.renderer]
+unsafe = true
+
+[params]
+profileMode.enabled = false
+homeInfoParams.Title = ""
+defaultTheme = "light"
+homeInfoParams.Content = """
+<div class="hero-banner">
+  <div class="hero-overlay">
+    <h1>我愿意做一个平凡的人,陪在你身旁</h1>
+    <p>平凡作此文集...</p>
+  </div>
+</div>
+<a href="mailto:by.chi@outlook.com">by.chi@outlook.com</a>
+"""
+
+[[params.socialIcons]]
+name = "github"
+url = "https://github.com/by-chi"
+[[menu.main]]
+name = "搜索"          # 也可用SVG图标代码，留空则仅显示图标
+url = "/search/"
+weight = 40            # 决定菜单项的位置顺序
+
+# 2. 为首页配置JSON输出格式，生成搜索索引文件 index.json
+[outputs]
+home = ["HTML", "RSS", "JSON"]
+[[menu.main]]
+name = "文章"
+url = "/posts/"
+weight = 10
+
+[[menu.main]]
+name = "标签"
+url = "/tags/"
+weight = 20
+
+[[menu.main]]
+name = "关于"
+url = "/about/"
+weight = 30
