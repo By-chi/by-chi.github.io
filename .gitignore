@@ -1,0 +1,22 @@
+# Hugo 构建产物和缓存
+/public/
+/resources/
+/.hugo_build.lock
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器配置
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node 模块（将来用到的话）
+node_modules/
+
+# 日志和临时文件
+*.log
+*.tmp
