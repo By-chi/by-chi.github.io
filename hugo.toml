@@ -4,7 +4,9 @@ title = 'By.Chi'
 theme = 'PaperMod'
 
 paginate = 8
-
+[markup.highlight]
+noClasses = false
+tabWidth = 4
 [markup.goldmark.renderer]
 unsafe = true
 
@@ -14,17 +16,22 @@ homeInfoParams.Title = ""
 defaultTheme = "light"
 homeInfoParams.Content = """
 <div class="hero-banner">
+  <div class="hero-bg-layer"></div>
   <div class="hero-overlay">
-    <h1>我愿意做一个平凡的人,陪在你身旁</h1>
-    <p>平凡作此文集...</p>
+    <h1>春日雨夏蝉鸣 明天是个好天气</h1>
+    <p>记录我的经历...</p>
   </div>
 </div>
 <a href="mailto:by.chi@outlook.com">by.chi@outlook.com</a>
+<script src="/js/hero-rotate.js"></script>
 """
 
 [[params.socialIcons]]
 name = "github"
 url = "https://github.com/by-chi"
+[[params.socialIcons]]
+name = "bilibili"
+url = "https://space.bilibili.com/1909594131"
 [[menu.main]]
 name = "搜索"          # 也可用SVG图标代码，留空则仅显示图标
 url = "/search/"

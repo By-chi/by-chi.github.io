@@ -10,7 +10,7 @@
 <meta name="description" content="Posts - By.Chi">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.7e180bb1d82f4662bd4f7249beb202285f0b9dbd7e10846d62dcbaf4aea0c186.css" integrity="sha256-fhgLsdgvRmK9T3JJvrICKF8Lnb1&#43;EIRtYty69K6gwYY=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.e72751c4b25b0c84f5fbedf859bf46b4f7b247653f75d98302d39c677e0f8498.css" integrity="sha256-5ydRxLJbDIT1&#43;&#43;34Wb9GtPeyR2U/ddmDAtOcZ34PhJg=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://localhost:1313/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
@@ -97,12 +97,30 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2 class="entry-hint-parent">我的小时候
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>今天找到了一张小时候的照片(划水) 大概是13年前吧,那是我才4岁 当看到这张图时,我顺着碎片的记忆寻找过去, 记得那是我们一家在河北省承德居住,爸爸在哪里打工,大概是建高铁铁路,具体什么职务就不记得了… 好怀念小时候啊。
+</p>
+  </div>
+  <ul class="post-tags-in-list">
+    <li><a href="http://localhost:1313/tags/%E5%88%92%E6%B0%B4/">#划水</a></li>
+    <li><a href="http://localhost:1313/tags/%E7%94%9F%E6%B4%BB/">#生活</a></li>
+  </ul>
+  <footer class="entry-footer"><span title='2026-05-01 13:56:24 +0800 CST'>May 1, 2026</span></footer>
+  <a class="entry-link" aria-label="post link to 我的小时候" href="http://localhost:1313/posts/%E6%88%91%E7%9A%84%E5%B0%8F%E6%97%B6%E5%80%99/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2 class="entry-hint-parent">Godot Windows平台如何自动处理鼠标穿透
     </h2>
   </header>
   <div class="entry-content">
     <p>可以利用DllImport导入SetWindowLong来设置窗口样式 具体代码: WindowsApiManager.cs
 using System.Runtime.InteropServices; using Godot; public partial class WindowsApiManager : Node { private nint _hWnd; [DllImport(&#34;user32.dll&#34;)] public static extern nint GetActiveWindow(); [DllImport(&#34;user32.dll&#34;)] private static extern int SetWindowLong(nint hWnd, int nIndex, uint dwNewLong); public override void _Ready() { _hWnd = GetActiveWindow(); _ = SetWindowLong(_hWnd, -20, 524416u); } public void SetClickThrough(bool clickthrough) { if (clickthrough) { _ = SetWindowLong(_hWnd, -20, 524448u); } else { _ = SetWindowLong(_hWnd, -20, 524416u); } } } MouseDetection.cs
+using Godot; public partial class MouseDetection : Node { private WindowsApiManager _api; private bool _clickthrough = true; public override void _Ready() { _api = GetNode&lt;WindowsApiManager&gt;(&#34;/root/WindowsApiManager&#34;); _api.SetClickThrough(clickthrough: true); } public override void _PhysicsProcess(double _) { DetectPassthrough(); } private void DetectPassthrough() { Viewport viewport = GetViewport(); Image img = viewport.GetTexture().GetImage(); Rect2 rect = viewport.GetVisibleRect(); Vector2 mousePosition = viewport.GetMousePosition(); int viewX = (int)((int)mousePosition.X &#43; rect.Position.X); int viewY = (int)((int)mousePosition.Y &#43; rect.Position.Y); int x = (int)(img.GetSize().X * viewX / rect.Size.X); int y = (int)(img.GetSize().Y * viewY / rect.Size.Y); if (x &lt; img.GetSize().X &amp;&amp; x &gt;= 0 &amp;&amp; y &lt; img.GetSize().Y &amp;&amp; y &gt;= 0) { SetClickability(img.GetPixel(x, y).A &gt;= 1f); } img.Dispose(); } private void SetClickability(bool clickable) { if (clickable != _clickthrough) { _clickthrough = clickable; _api.SetClickThrough(!clickable); } } } 使用方法: 将WindowsApiManager.cs设为自动加载脚本
 ...</p>
   </div>
   <ul class="post-tags-in-list">

@@ -1,0 +1,131 @@
+
+/* --- 全局背景与前景 --- */
+.chroma {
+  color: #f8f8f2;
+  background-color: #272822;
+}
+
+/* --- 错误 --- */
+.chroma .err {
+  color: #960050;
+  background-color: #1e0010;
+}
+
+/* --- 行号 --- */
+.chroma .ln {
+  color: #495162;
+  margin-right: 0.4em;
+  padding: 0 0.4em;
+  user-select: none;
+}
+.chroma .lnt {
+  color: #495162;
+  margin-right: 0.4em;
+  padding: 0 0.4em;
+  user-select: none;
+}
+
+/* --- 高亮行 --- */
+.chroma .hl {
+  background-color: #2c313c;
+}
+
+/* --- 关键字 --- */
+.chroma .k,
+.chroma .kc,
+.chroma .kd,
+.chroma .kn,
+.chroma .kp,
+.chroma .kr,
+.chroma .kt {
+  color: #c678dd;
+}
+
+/* --- 类型/类/接口 --- */
+.chroma .nc,
+.chroma .ne,
+.chroma .nn {
+  color: #e5c07b;
+}
+
+/* --- 函数/方法 --- */
+.chroma .nf,
+.chroma .fm {
+  color: #61afef;
+}
+.chroma .n { color: #61afef; }       /* 插入 */
+
+
+/* --- 变量/属性 --- */
+.chroma .nv,
+.chroma .vc,
+.chroma .vi {
+  color: #e06c75;
+}
+
+/* --- 属性/标签（如 [DllImport]）--- */
+.chroma .nd {
+  color: #e5c07b;
+}
+
+/* --- 字符串 --- */
+.chroma .s,
+.chroma .s1,
+.chroma .s2,
+.chroma .sc,
+.chroma .dl,
+.chroma .sd,
+.chroma .sh,
+.chroma .si,
+.chroma .sx {
+  color: #98c379;
+}
+
+/* 字符串转义 */
+.chroma .se {
+  color: #56b6c2;
+}
+
+/* --- 数字 --- */
+.chroma .m,
+.chroma .mb,
+.chroma .mf,
+.chroma .mh,
+.chroma .mi,
+.chroma .il,
+.chroma .mo {
+  color: #d19a66;
+}
+
+/* --- 操作符 --- */
+.chroma .o,
+.chroma .ow {
+  color: #f92672;
+}
+
+/* --- 注释 --- */
+.chroma .c,
+.chroma .c1,
+.chroma .cm,
+.chroma .cs,
+.chroma .ch {
+  color: #7f848e;
+}
+
+/* 注释预处理 */
+.chroma .cp,
+.chroma .cpf {
+  color: #66d9ef;
+}
+
+/* --- 其他名称 --- */
+.chroma .na { color: #e5c07b; } /* 属性名 */
+.chroma .no { color: #e5c07b; } /* 常量 */
+.chroma .nx { color: #e5c07b; } /* 其他名称 */
+
+/* --- 通用修饰 --- */
+.chroma .ge { font-style: italic; }  /* 强调 */
+.chroma .gs { font-weight: bold; }    /* 重要 */
+.chroma .gd { color: #f92672; }       /* 删除 */
+.chroma .gi { color: #61afef; }       /* 插入 */
+.chroma .p { color: #d9e9ee; }       /* 符号 */

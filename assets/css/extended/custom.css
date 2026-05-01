@@ -17,14 +17,27 @@
 .hero-banner {
     width: 100%;
     min-height: 65vh;
-    background: url('/images/background.png') center/cover no-repeat;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+	transition: background-image 0.5s ease-in-out;
+	overflow: hidden;
+	background-color: #1a1a1a;
 }
-
-/* ===== 文字层：左下角 + 默认隐藏，悬停显示 ===== */
+.hero-bg-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: opacity 1s ease-in-out;
+	background-size: contain;      /* 完整显示图片 */
+    background-color: #000;
+    z-index: 0;
+}
+/* ===== 文字层：左下角 + 始终显示 ===== */
 .hero-overlay {
     /* 位置：左下角 */
     position: absolute;
@@ -37,28 +50,26 @@
     width: auto;
     padding: 12px 20px;
 
-    /* 默认完全透明（隐藏） */
-    opacity: 0;
-    /* 平滑过渡显示/隐藏 */
-    transition: opacity 0.25s ease-in-out;
-
-    /* 背景：轻微半透黑底 + 毛玻璃（可选，不喜欢可删） */
+    /* 背景：轻微半透黑底 + 毛玻璃 */
     background: rgba(0, 0, 0, 0.35);
     backdrop-filter: blur(4px);
-    border-radius: 8px;
+    /* 已删除 border-radius */
 
     color: rgba(255, 255, 255, 0.9);
     text-align: left;
-    pointer-events: auto; /* 确保透明区域仍可响应鼠标 */
-}
-
-/* 悬停时显示文字层 */
-.hero-overlay:hover {
+    pointer-events: auto; /* 保留交互，但不再依赖悬停显示 */
+    
+    /* 始终完全显示，无过渡效果 */
     opacity: 1;
+    transition: none;
+    
+    z-index: 1;
 }
 
 /* 主标题 */
 .hero-overlay h1 {
+    position: relative;
+    z-index: 1;
     font-size: clamp(1rem, 4vw, 1.6rem);
     font-weight: 300;
     letter-spacing: 0.05em;
@@ -98,7 +109,7 @@
     }
 }
 
-/* 如果用户偏好减少动画：直接显示文字，不再隐藏 */
+/* 用户偏好减少动画时无额外改动，因为始终显示且无过渡 */
 @media (prefers-reduced-motion: reduce) {
     .hero-overlay {
         opacity: 1;
@@ -188,4 +199,22 @@
 .post-tags-in-list,
 .post-entry {
     will-change: transform, opacity;
+}
+/* 关于页头像：居中、圆形、带边框 */
+.about-avatar {
+  display: block;
+  width: 120px;
+  height: 120px;
+  max-width: 100%;          /* 覆盖 PaperMod 的 max-width 限制 */
+  border-radius: 50%;       /* 正圆 */
+  object-fit: cover;        /* 图片保持比例裁剪 */
+  border: 3px solid var(--primary);
+  margin: 0 auto 2rem;      /* 上下 0，左右自动 → 居中 */
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+/* 如果头像链接被 autolink 包裹，确保不破坏布局 */
+.about-avatar a {
+  display: block;
+  line-height: 0;
 }
