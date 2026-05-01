@@ -21,13 +21,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: false  # 不使用子模块，因为主题已直接包含
 
       - name: 安装 Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.145.0'   # 固定版本，与你本地一致
+          hugo-version: 'latest'     # 使用最新版，就像你本地一样
           extended: true
 
       - name: 构建站点
